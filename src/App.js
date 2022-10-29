@@ -1,13 +1,21 @@
 import "./App.css";
 
-import Board from "./components/Board/Board";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-function App() {
+import { Home, FourOhFour } from "./routes";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Home />,
+        errorElement: <FourOhFour />,
+    },
+]);
+
+export default function App() {
     return (
         <div className="App">
-            <Board />
+            <RouterProvider router={router} />
         </div>
     );
 }
-
-export default App;

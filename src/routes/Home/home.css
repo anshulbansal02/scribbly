@@ -1,0 +1,35 @@
+.home-page {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.home-form {
+    width: 500px;
+}
+
+.home-form > * {
+    margin-bottom: 18px;
+}
+
+.row {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.row > * {
+    max-width: 48%;
+    margin-right: 4%;
+}
+
+.row > *:last-child {
+    margin-right: 0;
+}
+
+.title {
+    font-size: 42px;
+    text-align: center;
+    font-family: "Krona One";
+    margin: 120px 0;
+}

@@ -1,28 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Canvas from "../Canvas/Canvas";
 import useCanvas from "../Canvas/useCanvas";
 
+import SocketContext from "./../../contexts/SocketContext";
+
 import Toolbox from "../Toolbox/Toolbox";
 
-import io from "socket.io-client";
-
-const socket = io(`http://${window.location.hostname}:4000`);
-
-function getEventCoords(event) {
-    return {
-        x: event.clientX - event.target.offsetLeft,
-        y: event.clientY - event.target.offsetTop,
-    };
-}
-
-function getNormalizedCoords(coords) {
-    return coords;
-}
+import { getEventCoords, getNormalizedCoords } from "./utils";
 
 const Board = () => {
     const { canvas, canvasRef } = useCanvas();
     const [isTouched, setIsTouched] = useState(false);
     const [isActive, setIsActive] = useState(true);
+
+    const socket = useContext(SocketContext);
 
     useEffect(() => {
         // Socket event handlers
