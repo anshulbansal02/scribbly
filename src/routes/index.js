@@ -1,2 +1,14 @@
-export { default as Home } from "./Home/Home.jsx";
-export { default as FourOhFour } from "./FourOhFour/FourOhFour.jsx";
+import Home from "./Home/Home";
+import FourOhFour from "./FourOhFour/FourOhFour";
+
+import { createBrowserRouter } from "react-router-dom";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Home />,
+        errorElement: <FourOhFour />,
+    },
+]);
+
+export default router;

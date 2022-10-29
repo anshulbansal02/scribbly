@@ -1,16 +1,8 @@
 import "./App.css";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 
-import { Home, FourOhFour } from "./routes";
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-        errorElement: <FourOhFour />,
-    },
-]);
+import router from "./routes";
 
 export default function App() {
     return (

@@ -1,6 +1,6 @@
 import "./home.css";
 
-import useInput from "./useInput";
+import useInput from "../../hooks/useInput";
 
 import { Modal, Page, Button, Input } from "./../../components";
 

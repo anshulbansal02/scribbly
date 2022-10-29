@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import Canvas from "../Canvas/Canvas";
-import useCanvas from "../Canvas/useCanvas";
+import useCanvas from "../../hooks/useCanvas";
 
 import SocketContext from "./../../contexts/SocketContext";
 
