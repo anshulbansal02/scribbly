@@ -4,8 +4,21 @@ import "./input.css";
 
 import useInput from "./useInput";
 
+import Modal from "../../components/Modal/Modal";
+import { useState } from "react";
+
 const Home = () => {
     const [username, setUsername] = useInput();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleJoinRoom = () => {
+        setIsModalOpen(true);
+    };
 
     return (
         <div className="home-page">
@@ -22,9 +35,22 @@ const Home = () => {
                 <button className="btn-block">Play Random</button>
                 <div className="row">
                     <button className="btn-block">New Room</button>
-                    <button className="btn-block">Join Room</button>
+                    <button className="btn-block" onClick={handleJoinRoom}>
+                        Join Room
+                    </button>
                 </div>
             </div>
+
+            <Modal isOpen={isModalOpen} onOutsideClick={handleModalClose}>
+                <h3>Modal Title</h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Perferendis molestias, ea consequuntur eaque optio provident
+                    dolore quas suscipit beatae! Dicta voluptas laboriosam
+                    eligendi recusandae nisi vel molestias debitis labore
+                    beatae!
+                </p>
+            </Modal>
         </div>
     );
 };
