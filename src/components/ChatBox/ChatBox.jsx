@@ -1,7 +1,7 @@
 import "./chatbox.css";
 import { useState, useEffect, useContext } from "react";
 
-import SocketContext from "./../../contexts/SocketContext";
+import SocketContext from "contexts/SocketContext";
 
 const ChatBox = () => {
     const socket = useContext(SocketContext);
@@ -17,7 +17,7 @@ const ChatBox = () => {
         return () => {
             socket.off("chat-message");
         };
-    }, []);
+    }, [messageList, socket]);
 
     const sendMessage = () => {
         socket.emit("chat-message", messageValue);

@@ -1,8 +1,8 @@
 import "./home.css";
 
-import useInput from "../../hooks/useInput";
+import useInput from "hooks/useInput";
 
-import { Modal, Page, Button, Input } from "./../../components";
+import { Modal, Page, Button, Input } from "components";
 
 import { useState } from "react";
 

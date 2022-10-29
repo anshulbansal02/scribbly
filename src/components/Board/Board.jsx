@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import Canvas from "../Canvas/Canvas";
-import useCanvas from "../../hooks/useCanvas";
+import Canvas from "./../Canvas/Canvas";
+import useCanvas from "hooks/useCanvas";
 
-import SocketContext from "./../../contexts/SocketContext";
+import SocketContext from "contexts/SocketContext";
 
 import Toolbox from "../Toolbox/Toolbox";
 
@@ -46,7 +46,7 @@ const Board = () => {
         socket.on("canvas-clear", () => {
             canvas.clear();
         });
-    }, [socket]);
+    }, [socket, canvas]);
 
     // Mouse and Touch event handlers
     const handleTouch = (e) => {
