@@ -1,8 +1,8 @@
 import "./button.css";
 
-const Button = ({ children, ...props }) => {
+const Button = ({ children, className, ...props }) => {
     return (
-        <button className="btn-block" {...props}>
+        <button className={`btn-block ${className}`} {...props}>
             {children}
         </button>
     );

@@ -44,7 +44,9 @@ const Home = () => {
                     onChange={setUsername}
                     spellcheck="false"
                 />
-                <Button onClick={handlePlayNow}>Play Now</Button>
+                <Button onClick={handlePlayNow} className="green">
+                    Play Now
+                </Button>
                 <Button onClick={handleNewRoom}>New Room</Button>
                 <Button onClick={handleJoinRoom}>Join Room</Button>
             </div>

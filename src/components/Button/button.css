@@ -36,3 +36,17 @@
     box-shadow: #d6d6e7 0 3px 7px inset;
     transform: translateY(2px);
 }
+
+.btn-block.green {
+    background-color: #27ae60;
+    color: rgb(240, 240, 240);
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px, rgb(3, 107, 51) 0 -3px 0 inset;
+}
+
+.btn-block.blue {
+    background-color: #175bda;
+    color: rgb(240, 240, 240);
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #0039a3 0 -3px 0 inset;
+}
