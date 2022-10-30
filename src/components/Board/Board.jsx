@@ -6,7 +6,7 @@ import SocketContext from "contexts/SocketContext";
 
 import Toolbox from "../Toolbox/Toolbox";
 
-import { getEventCoords, getNormalizedCoords } from "./utils";
+import { getEventCoords, getNormalizedCoords } from "utils";
 
 const Board = () => {
     const { canvas, canvasRef } = useCanvas();

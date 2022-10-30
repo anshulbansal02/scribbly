@@ -1,0 +1,32 @@
+.selector {
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: #f5f5fa;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    width: 100%;
+}
+
+.selector-btn {
+    cursor: pointer;
+    height: 100%;
+    width: 48px;
+    border-width: 0;
+    background-color: transparent;
+}
+
+.selector-btn svg {
+    width: 20px;
+    color: rgb(100, 100, 100);
+    transition: color 0.2s;
+}
+
+.selector-btn:hover svg {
+    color: rgb(20, 20, 20);
+}
+
+.selected-option {
+    font-size: 1.5rem;
+}

@@ -5,10 +5,13 @@ import useInput from "hooks/useInput";
 import { Modal, Page, Button, Input } from "components";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const [username, setUsername] = useInput();
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -16,7 +19,16 @@ const Home = () => {
 
     const handlePlayNow = () => {};
 
-    const handleNewRoom = () => {};
+    const handleNewRoom = () => {
+        navigate("/game");
+
+        /*
+        Go to lobby page
+        Request server to create new game
+        returned game id is used to construct game join link
+
+        */
+    };
 
     const handleJoinRoom = () => {
         setIsModalOpen(true);
