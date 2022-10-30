@@ -1,0 +1,29 @@
+.avatar {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.avatar .avatar-img-container {
+    background-color: rgb(253, 225, 215);
+    width: 60px;
+    height: 60px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar .avatar-img {
+    width: 60%;
+    height: 60%;
+}
+
+.avatar-label {
+    font-size: 1.4rem;
+    margin-top: 4px;
+    font-weight: 500;
+}

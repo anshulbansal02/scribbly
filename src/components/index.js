@@ -9,3 +9,4 @@ export { default as Input } from "./Input/Input";
 export { default as Modal } from "./Modal/Modal";
 export { default as Avatar } from "./Avatar/Avatar";
 export { default as Selector } from "./Selector/Selector";
+export { default as TextShare } from "./TextShare/TextShare";
