@@ -23,11 +23,11 @@ const Lobby = () => {
 
     return (
         <Page>
-            <div className="home-page">
-                <h3 className="title">Scribbly | Lobby</h3>
-
-                <div className="lobby">
+            <div className="row">
+                <div className="col">
                     <div className="settings">
+                        <h4>Game Preferences</h4>
+                        <label className="label">Difficulty Level</label>
                         <Selector
                             options={gameSettings.difficulty.options}
                             labelKey="label"
@@ -35,6 +35,10 @@ const Lobby = () => {
                             selected={selectedSettings.difficulty}
                             onChange={handleSettingsChange}
                         />
+                        <label className="label">
+                            Drawing Time (In Seconds)
+                        </label>
+
                         <Selector
                             options={gameSettings.drawingTime.options}
                             labelKey="label"
@@ -42,6 +46,8 @@ const Lobby = () => {
                             selected={selectedSettings.drawingTime}
                             onChange={handleSettingsChange}
                         />
+                        <label className="label">Number Of Rounds</label>
+
                         <Selector
                             options={gameSettings.rounds.options}
                             labelKey="label"
@@ -50,6 +56,8 @@ const Lobby = () => {
                             onChange={handleSettingsChange}
                         />
                     </div>
+                </div>
+                <div className="col">
                     <div className="players-in-room">
                         <Avatar />
                     </div>

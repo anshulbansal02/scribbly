@@ -1,7 +1,7 @@
 import "./page.css";
 
-const Page = ({ children }) => {
-    return <div className="page">{children}</div>;
+const Page = ({ children, className }) => {
+    return <div className={`page ${className}`}>{children}</div>;
 };
 
 export default Page;

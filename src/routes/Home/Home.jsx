@@ -21,13 +21,6 @@ const Home = () => {
 
     const handleNewRoom = () => {
         navigate("/game");
-
-        /*
-        Go to lobby page
-        Request server to create new game
-        returned game id is used to construct game join link
-
-        */
     };
 
     const handleJoinRoom = () => {
@@ -35,30 +28,40 @@ const Home = () => {
     };
 
     return (
-        <Page>
-            <div className="home-page">
+        <Page className="home-page">
+            <div className="header">
                 <h3 className="title">Scribbly</h3>
-
-                <div className="home-form">
-                    <Input
-                        type="text"
-                        placeholder="What would you like to call yourself?"
-                        value={username}
-                        onChange={setUsername}
-                    />
-                    <Button onClick={handlePlayNow}>Play Random</Button>
-                    <div className="row">
-                        <Button onClick={handleNewRoom}>New Room</Button>
-                        <Button onClick={handleJoinRoom}>Join Room</Button>
-                    </div>
-                </div>
-
-                <Modal isOpen={isModalOpen} onOutsideClick={closeModal}>
-                    <h3>Enter Room Code</h3>
-                    <Input placeholder="Room Code" />
-                    <Button>Lessgo</Button>
-                </Modal>
+                <h5 className="sub-title">
+                    Realtime multiplayer online pictionary
+                </h5>
             </div>
+
+            <div className="home-ctas">
+                <Input
+                    type="text"
+                    placeholder="What would you like to call yourself?"
+                    value={username}
+                    onChange={setUsername}
+                    spellcheck="false"
+                />
+                <Button onClick={handlePlayNow}>Play Now</Button>
+                <Button onClick={handleNewRoom}>New Room</Button>
+                <Button onClick={handleJoinRoom}>Join Room</Button>
+            </div>
+
+            <Modal isOpen={isModalOpen} onOutsideClick={closeModal}>
+                <h4>What's your room code?</h4>
+                <Input
+                    type="text"
+                    placeholder="Room Code"
+                    value={""}
+                    onChange={() => {}}
+                    spellcheck="false"
+                    className="mono-input"
+                />
+                <Button onClick={handlePlayNow}>Lessgo</Button>
+                <Button onClick={handleNewRoom}>Cancel</Button>
+            </Modal>
         </Page>
     );
 };
