@@ -1,10 +1,10 @@
 import "./chatbox.css";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 
-import SocketContext from "contexts/SocketContext";
+import { useSocket } from "contexts/SocketContext";
 
 const ChatBox = () => {
-    const socket = useContext(SocketContext);
+    const socket = useSocket();
 
     const [messageValue, setMessageValue] = useState("");
     const [messageList, setMessageList] = useState([]);

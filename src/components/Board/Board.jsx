@@ -1,8 +1,8 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import Canvas from "./../Canvas/Canvas";
 import useCanvas from "hooks/useCanvas";
 
-import SocketContext from "contexts/SocketContext";
+import { useSocket } from "contexts/SocketContext";
 
 import Toolbox from "../Toolbox/Toolbox";
 
@@ -13,7 +13,7 @@ const Board = () => {
     const [isTouched, setIsTouched] = useState(false);
     const [isActive, setIsActive] = useState(true);
 
-    const socket = useContext(SocketContext);
+    const socket = useSocket();
 
     useEffect(() => {
         // Socket event handlers
