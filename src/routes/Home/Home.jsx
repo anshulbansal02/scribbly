@@ -6,10 +6,15 @@ import { Modal, Page, Button, Input } from "components";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSocket } from "contexts/SocketContext";
+import events from "config/events";
 
 const Home = () => {
     const [username, setUsername] = useInput();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [usernameInputError, setUsernameInputError] = useState("");
+
+    const socket = useSocket();
 
     const navigate = useNavigate();
 
@@ -20,7 +25,21 @@ const Home = () => {
     const handlePlayNow = () => {};
 
     const handleNewRoom = () => {
-        navigate("/game");
+        if (!username) {
+            setUsernameInputError("Please provide a username");
+            setTimeout(() => setUsernameInputError(""), 1000);
+            return;
+        }
+
+        // Request room creation
+        socket.emit(events.ROOM_CREATE);
+
+        // intermediate loading screen
+
+        socket.on(events.ROOM_JOIN, (room_data) => {
+            // hydrate room data
+            // move to lobby
+        });
     };
 
     const handleJoinRoom = () => {
@@ -42,7 +61,8 @@ const Home = () => {
                     placeholder="What would you like to call yourself?"
                     value={username}
                     onChange={setUsername}
-                    spellcheck="false"
+                    spellCheck="false"
+                    error={usernameInputError}
                 />
                 <Button onClick={handlePlayNow} className="green">
                     Play Now
@@ -58,7 +78,7 @@ const Home = () => {
                     placeholder="Room Code"
                     value={""}
                     onChange={() => {}}
-                    spellcheck="false"
+                    spellCheck="false"
                     className="mono-input"
                 />
                 <Button onClick={handlePlayNow}>Lessgo</Button>
