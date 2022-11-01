@@ -5,7 +5,6 @@ import useInput from "hooks/useInput";
 import { Modal, Page, Button, Input } from "components";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSocket } from "contexts/SocketContext";
 import events from "config/events";
 import { useEffect } from "react";
@@ -17,8 +16,6 @@ const Home = () => {
     const [usernameInputError, setUsernameInputError] = useState("");
 
     const socket = useSocket();
-
-    const navigate = useNavigate();
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -34,7 +31,7 @@ const Home = () => {
         socket.on(events.ROOM_PLAYER_JOIN, (player) => {
             console.log("Player joined the room: ", player);
         });
-    }, []);
+    }, [socket]);
 
     const handlePlayNow = () => {
         if (!username) {

@@ -28,7 +28,6 @@ function useCanvas() {
         },
 
         fill({ x, y }, color) {
-            const ctx = ctxRef.current;
             // Implementation needed
         },
 
@@ -38,7 +37,6 @@ function useCanvas() {
         },
 
         save() {
-            const ctx = ctxRef.current;
             // Implementation needed
         },
     };

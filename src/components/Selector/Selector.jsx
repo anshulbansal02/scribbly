@@ -17,7 +17,7 @@ const Selector = ({ name, options = [], selected, labelKey, onChange }) => {
             }
         }
         setSelectedI(index);
-    }, [selectedOption]);
+    }, [selectedOption, options]);
 
     const handleLeftCaret = () => {
         const newSelectedIndex =
