@@ -8,9 +8,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "contexts/SocketContext";
 import events from "config/events";
+import { useEffect } from "react";
 
 const Home = () => {
     const [username, setUsername] = useInput();
+    const [roomCode, setRoomCode] = useInput();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [usernameInputError, setUsernameInputError] = useState("");
 
@@ -22,7 +24,25 @@ const Home = () => {
         setIsModalOpen(false);
     };
 
-    const handlePlayNow = () => {};
+    useEffect(() => {
+        socket.on(events.ROOM_JOIN, (room_data) => {
+            console.log("Joined room ", room_data);
+            // hydrate room data
+            // move to lobby
+        });
+
+        socket.on(events.ROOM_PLAYER_JOIN, (player) => {
+            console.log("Player joined the room: ", player);
+        });
+    }, []);
+
+    const handlePlayNow = () => {
+        if (!username) {
+            setUsernameInputError("Please provide a username");
+            setTimeout(() => setUsernameInputError(""), 1000);
+            return;
+        }
+    };
 
     const handleNewRoom = () => {
         if (!username) {
@@ -32,18 +52,22 @@ const Home = () => {
         }
 
         // Request room creation
-        socket.emit(events.ROOM_CREATE);
+        socket.emit(events.ROOM_CREATE, { username });
 
         // intermediate loading screen
-
-        socket.on(events.ROOM_JOIN, (room_data) => {
-            // hydrate room data
-            // move to lobby
-        });
     };
 
-    const handleJoinRoom = () => {
+    const handleJoinRoomModal = () => {
+        if (!username) {
+            setUsernameInputError("Please provide a username");
+            setTimeout(() => setUsernameInputError(""), 1000);
+            return;
+        }
         setIsModalOpen(true);
+    };
+
+    const handleRoomJoin = () => {
+        socket.emit(events.ROOM_JOIN, { roomId: roomCode, username });
     };
 
     return (
@@ -68,21 +92,25 @@ const Home = () => {
                     Play Now
                 </Button>
                 <Button onClick={handleNewRoom}>New Room</Button>
-                <Button onClick={handleJoinRoom}>Join Room</Button>
+                <Button onClick={handleJoinRoomModal}>Join Room</Button>
             </div>
 
             <Modal isOpen={isModalOpen} onOutsideClick={closeModal}>
-                <h4>What's your room code?</h4>
-                <Input
-                    type="text"
-                    placeholder="Room Code"
-                    value={""}
-                    onChange={() => {}}
-                    spellCheck="false"
-                    className="mono-input"
-                />
-                <Button onClick={handlePlayNow}>Lessgo</Button>
-                <Button onClick={handleNewRoom}>Cancel</Button>
+                <div className="room-code-modal">
+                    <h4>What's your room code?</h4>
+                    <Input
+                        type="text"
+                        placeholder="Room Code"
+                        value={roomCode}
+                        onChange={setRoomCode}
+                        spellCheck="false"
+                        className="mono-input"
+                    />
+                    <Button onClick={handleRoomJoin} className="green">
+                        Lessgo
+                    </Button>
+                    <Button onClick={closeModal}>Cancel</Button>
+                </div>
             </Modal>
         </Page>
     );

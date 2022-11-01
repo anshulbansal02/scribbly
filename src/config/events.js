@@ -1,6 +1,7 @@
 const Events = {
     ROOM_CREATE: "room:create", // C
-    ROOM_JOIN: "room:join", // C
+    ROOM_JOIN: "room:join", // S,C
+    ROOM_PLAYER_JOIN: "room:player_join", // S
     ROOM_INFO: "room:info", // S
     ROOM_LEAVE: "room:leave", // C
     ROOM_KICK: "room:kick", // S,C
@@ -26,4 +27,4 @@ const Events = {
     CHAT_GUESS: "chat:guess", // S
 };
 
-module.exports = Object.freeze(Events);
+export default Object.freeze(Events);

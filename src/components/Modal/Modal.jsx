@@ -7,7 +7,7 @@ const Modal = ({ isOpen, children, onOutsideClick = () => {} }) => {
 
     return (
         <div
-            className={`modal-container ${isOpen ? null : "closed"}`}
+            className={`modal-container ${isOpen ? "" : "closed"}`}
             onClick={handleOutsideClick}
         >
             <div className="modal">{children}</div>

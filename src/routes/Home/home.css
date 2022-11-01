@@ -45,3 +45,22 @@
 .mono-input {
     font-family: "JetBrains Mono", monospace;
 }
+
+.room-code-modal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 420px;
+    padding: 16px 24px;
+}
+
+.room-code-modal h4,
+.room-code-modal .input-container {
+    grid-column: span 2;
+}
+
+.room-code-modal h4 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
