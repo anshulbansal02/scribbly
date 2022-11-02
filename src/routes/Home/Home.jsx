@@ -1,70 +1,88 @@
+// Styles
 import "./home.css";
 
-import useInput from "hooks/useInput";
+// Misc Imports
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useSetAtom } from "jotai";
 
+import { useInput, useToggle } from "hooks";
+import { useSocket } from "contexts/SocketContext";
+import { roomIdAtom, roomOwnerAtom, roomPlayersAtom } from "atoms";
+
+import IOEvents from "config/events";
+
+// Component Imports
 import { Modal, Page, Button, Input } from "components";
 
-import { useState } from "react";
-import { useSocket } from "contexts/SocketContext";
-import events from "config/events";
-import { useEffect } from "react";
-
-const Home = () => {
-    const [username, setUsername] = useInput();
-    const [roomCode, setRoomCode] = useInput();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+export default function Home() {
+    // UI State
+    const usernameInput = useInput();
     const [usernameInputError, setUsernameInputError] = useState("");
+    const roomCodeInput = useInput();
+    const [roomCodeInputError, setRoomCodeInputError] = useState("");
+    const [roomCodeModalOpen, toggleRoomCodeModal] = useToggle();
 
     const socket = useSocket();
+    const navigate = useNavigate();
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    // Atoms State
+    const setRoomId = useSetAtom(roomIdAtom);
+    const setRoomPlayers = useSetAtom(roomPlayersAtom);
+    const setRoomOwner = useSetAtom(roomOwnerAtom);
 
     useEffect(() => {
-        socket.on(events.ROOM_JOIN, (room_data) => {
-            console.log("Joined room ", room_data);
-            // hydrate room data
-            // move to lobby
+        socket.on(IOEvents.ROOM_JOIN, (room) => {
+            setRoomId(() => room.id);
+            setRoomPlayers(() => room.players);
+            setRoomOwner(() => room.admin);
+
+            navigate("/game");
         });
 
-        socket.on(events.ROOM_PLAYER_JOIN, (player) => {
-            console.log("Player joined the room: ", player);
-        });
+        return () => {
+            socket.off(IOEvents.ROOM_JOIN);
+        };
     }, [socket]);
 
+    // Handlers
     const handlePlayNow = () => {
-        if (!username) {
-            setUsernameInputError("Please provide a username");
-            setTimeout(() => setUsernameInputError(""), 1000);
-            return;
-        }
+        // Implementation Deferred
     };
 
     const handleNewRoom = () => {
+        const { value: username } = usernameInput;
         if (!username) {
-            setUsernameInputError("Please provide a username");
-            setTimeout(() => setUsernameInputError(""), 1000);
+            setUsernameInputError("Please enter a valid username.");
+            setTimeout(() => setUsernameInputError(""), 1500);
             return;
         }
-
         // Request room creation
-        socket.emit(events.ROOM_CREATE, { username });
-
-        // intermediate loading screen
+        socket.emit(IOEvents.ROOM_CREATE, { username });
     };
 
     const handleJoinRoomModal = () => {
-        if (!username) {
-            setUsernameInputError("Please provide a username");
-            setTimeout(() => setUsernameInputError(""), 1000);
+        if (!usernameInput.value) {
+            setUsernameInputError("Please enter a valid username.");
+            setTimeout(() => setUsernameInputError(""), 1500);
             return;
         }
-        setIsModalOpen(true);
+        toggleRoomCodeModal();
     };
 
     const handleRoomJoin = () => {
-        socket.emit(events.ROOM_JOIN, { roomId: roomCode, username });
+        const { value: roomId } = roomCodeInput;
+        const { value: username } = usernameInput;
+        if (!/[a-z]{6}/.test(roomId)) {
+            setRoomCodeInputError("Please enter a valid room code.");
+            setTimeout(() => setRoomCodeInputError(""), 1500);
+            return;
+        }
+        // Request room join
+        socket.emit(IOEvents.ROOM_JOIN, {
+            roomId,
+            username,
+        });
     };
 
     return (
@@ -80,10 +98,9 @@ const Home = () => {
                 <Input
                     type="text"
                     placeholder="What would you like to call yourself?"
-                    value={username}
-                    onChange={setUsername}
                     spellCheck="false"
                     error={usernameInputError}
+                    {...usernameInput}
                 />
                 <Button onClick={handlePlayNow} className="green">
                     Play Now
@@ -92,25 +109,26 @@ const Home = () => {
                 <Button onClick={handleJoinRoomModal}>Join Room</Button>
             </div>
 
-            <Modal isOpen={isModalOpen} onOutsideClick={closeModal}>
+            <Modal
+                isOpen={roomCodeModalOpen}
+                onOutsideClick={toggleRoomCodeModal}
+            >
                 <div className="room-code-modal">
                     <h4>What's your room code?</h4>
                     <Input
                         type="text"
                         placeholder="Room Code"
-                        value={roomCode}
-                        onChange={setRoomCode}
                         spellCheck="false"
                         className="mono-input"
+                        error={roomCodeInputError}
+                        {...roomCodeInput}
                     />
                     <Button onClick={handleRoomJoin} className="green">
                         Lessgo
                     </Button>
-                    <Button onClick={closeModal}>Cancel</Button>
+                    <Button onClick={toggleRoomCodeModal}>Cancel</Button>
                 </div>
             </Modal>
         </Page>
     );
-};
-
-export default Home;
+}
