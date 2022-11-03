@@ -21,6 +21,12 @@ const Lobby = () => {
             setPlayersInRoom((players) => [...players, player]);
         });
 
+        socket.on(IOEvents.ROOM_PLAYER_LEAVE, (player) => {
+            setPlayersInRoom((players) =>
+                players.filter((playerInRoom) => player.id !== playerInRoom.id)
+            );
+        });
+
         socket.on(IOEvents.GAME_SETTINGS_CHANGE, (settings) => {
             setGameSettings((prevSettings) => ({
                 ...prevSettings,
