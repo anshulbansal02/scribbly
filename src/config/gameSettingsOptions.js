@@ -1,4 +1,4 @@
-const gameSettings = {
+const gameSettingsOptions = {
     difficulty: {
         options: [
             { label: "Easy", value: 0 },
@@ -39,4 +39,4 @@ const gameSettings = {
     },
 };
 
-export default gameSettings;
+export default gameSettingsOptions;

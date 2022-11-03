@@ -1,75 +1,63 @@
 import "./lobby.css";
 
-import { Selector, Avatar, Page, Button, TextShare } from "components";
-import { useState } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect } from "react";
 
-import { gameSettings } from "config";
+import { useSocket } from "contexts/SocketContext";
+import IOEvents from "config/events";
+import { gameSettingsAtom, roomJoinURLAtom, roomPlayersAtom } from "atoms";
+
+import { Page, TextShare, GameSettings, RoomPlayers, Button } from "components";
 
 const Lobby = () => {
-    const [selectedSettings, setSelectedSettings] = useState({
-        difficulty: gameSettings.difficulty.default,
-        drawingTime: gameSettings.drawingTime.default,
-        rounds: gameSettings.rounds.default,
-    });
+    const roomJoinURL = useAtomValue(roomJoinURLAtom);
+    const setPlayersInRoom = useSetAtom(roomPlayersAtom);
+    const setGameSettings = useSetAtom(gameSettingsAtom);
 
-    const handleSettingsChange = (selected) => {
-        const { name, value } = selected;
-        console.log("New Settings: ", {
-            ...selectedSettings,
-            [name]: selected,
+    const socket = useSocket();
+
+    useEffect(() => {
+        socket.on(IOEvents.ROOM_PLAYER_JOIN, (player) => {
+            setPlayersInRoom((players) => [...players, player]);
         });
-        setSelectedSettings({ ...selectedSettings, [name]: value });
+
+        socket.on(IOEvents.GAME_SETTINGS_CHANGE, (settings) => {
+            setGameSettings((prevSettings) => ({
+                ...prevSettings,
+                ...settings,
+            }));
+        });
+
+        return () => {
+            socket.off(IOEvents.ROOM_PLAYER_JOIN);
+            socket.off(IOEvents.GAME_SETTINGS_CHANGE);
+        };
+    }, [socket]);
+
+    const handleRoomJoin = () => {};
+    const handleRoomExit = () => {};
+
+    const handleGameSettingsChange = (settings) => {
+        socket.emit(IOEvents.GAME_SETTINGS_CHANGE, settings);
     };
 
     return (
         <Page className="lobby-page">
             <div className="header">
-                <h3 className="logo">Scribbly</h3>
+                <h4 className="logo">Scribbly</h4>
             </div>
-            <div className="settings">
-                <h4>Game Preferences</h4>
-                <label className="label">Difficulty Level</label>
-                <Selector
-                    options={gameSettings.difficulty.options}
-                    labelKey="label"
-                    name="difficulty"
-                    selected={selectedSettings.difficulty}
-                    onChange={handleSettingsChange}
-                />
-                <label className="label">Drawing Time (In Seconds)</label>
-
-                <Selector
-                    options={gameSettings.drawingTime.options}
-                    labelKey="label"
-                    name="drawingTime"
-                    selected={selectedSettings.drawingTime}
-                    onChange={handleSettingsChange}
-                />
-                <label className="label">Number Of Rounds</label>
-
-                <Selector
-                    options={gameSettings.rounds.options}
-                    labelKey="label"
-                    name="rounds"
-                    selected={selectedSettings.rounds}
-                    onChange={handleSettingsChange}
-                />
+            <div className="lobby-main">
+                <GameSettings onChange={handleGameSettingsChange} />
+                <RoomPlayers />
             </div>
-            <div className="room">
-                <h4>In The Room</h4>
-                <TextShare text="scribbly.app/join/xdfjld" />
-                <div className="players-list">
-                    <Avatar label="knavish" />
-                    <Avatar label="theplayeroftheshadow" />
-                    <Avatar label="anshul" />
-                    <Avatar label="mightyrock" />
-                    <Avatar label="kris" />
-                    <Avatar label="Trockthemighty" />
-                    <Avatar label="knavihs" />
-                </div>
-            </div>
+            <TextShare text={roomJoinURL} />
 
-            <Button className="green">Let's Play</Button>
+            <div className="btn-group">
+                <Button className="green" onClick={handleRoomJoin}>
+                    Let's Play
+                </Button>
+                <Button onClick={handleRoomExit}>Exit Room</Button>
+            </div>
         </Page>
     );
 };

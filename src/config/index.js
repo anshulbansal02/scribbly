@@ -1,1 +1,1 @@
-export { default as gameSettings } from "./gameSettings";
+export { default as gameSettingsOptions } from "./gameSettingsOptions";

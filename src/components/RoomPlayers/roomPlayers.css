@@ -1,0 +1,13 @@
+.room-players {
+    /* background-color: aqua; */
+}
+
+.room-players h4 {
+    margin-bottom: 24px;
+    font-size: 1.8rem;
+}
+
+.players-list {
+    display: flex;
+    gap: 36px;
+}

@@ -1,0 +1,35 @@
+.game-settings {
+    padding: 24px;
+    border-radius: 16px;
+
+    box-shadow: 0px 2.8px 2.2px rgba(0, 0, 0, 0.05),
+        0px 6.7px 5.3px rgba(0, 0, 0, 0.036),
+        0px 12.5px 10px rgba(0, 0, 0, 0.03),
+        0px 22.3px 17.9px rgba(0, 0, 0, 0.025),
+        0px 41.8px 33.4px rgba(0, 0, 0, 0.02),
+        0px 100px 80px rgba(0, 0, 0, 0.014);
+}
+
+.game-settings h4 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+}
+
+.settings-list {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 20px;
+}
+
+.setting-label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.setting {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 4px;
+}

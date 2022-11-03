@@ -1,15 +1,15 @@
 import "./avatar.css";
 import avatars from "./avatars";
 
-const Avatar = ({ label }) => {
+const Avatar = ({ id, label }) => {
     return (
         <div className="avatar">
             <div className="avatar-img-container">
                 <img
                     className="avatar-img"
-                    src={avatars.avatar1.img}
-                    alt={avatars.avatar1.alt}
                     draggable="false"
+                    src={`https://avatars.dicebear.com/api/bottts/${id}.svg`}
+                    alt={label}
                 />
             </div>
             {label && <p className="avatar-label">{label}</p>}

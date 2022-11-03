@@ -1,67 +1,26 @@
 .lobby-page {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 48px;
-}
-
-.lobby-page .header,
-.lobby-page button {
-    grid-column: span 3;
-}
-
-.lobby-page .header {
-    align-self: end;
-}
-
-.lobby-page .room {
-    grid-column: span 2;
     display: flex;
-    flex-flow: column nowrap;
-    align-items: flex-start;
     gap: 24px;
+    flex-flow: column nowrap;
 }
 
-.players-list {
+.lobby-page .lobby-main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+}
+
+.btn-group {
     display: flex;
-    flex-wrap: wrap;
-    gap: 36px;
+    flex-flow: row;
+    gap: 16px;
 }
 
-.settings {
-    grid-column: span 1;
-}
-
-.lobby-page > button {
-    grid-column: 2/3;
+.header {
+    padding: 36px 0;
 }
 
 .logo {
     font-size: 2.4rem;
     font-family: "Krona One";
-}
-
-.settings {
-    border: 1px solid rgb(229, 229, 229);
-    padding: 36px;
-    border-radius: 8px;
-}
-
-.label {
-    font-size: 1.6rem;
-    text-align: center;
-    font-weight: 500;
-    margin-bottom: 8px;
-    margin-top: 24px;
-    display: block;
-}
-
-.settings h4 {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 600;
-}
-
-.room h4 {
-    font-size: 1.8rem;
-    line-height: 1;
 }

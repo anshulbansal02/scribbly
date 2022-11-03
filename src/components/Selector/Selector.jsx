@@ -6,31 +6,29 @@ import { ReactComponent as CaretLeft } from "./caret-left.svg";
 import { ReactComponent as CaretRight } from "./caret-right.svg";
 
 const Selector = ({ name, options = [], selected, labelKey, onChange }) => {
-    const [selectedOption, setSelectedOption] = useState(selected);
-    const [selectedI, setSelectedI] = useState(null);
+    const [selectedI, setSelectedI] = useState(0);
 
     useEffect(() => {
         let index = 0;
         for (; index < options.length; index++) {
-            if (options[index] === selectedOption) {
+            if (JSON.stringify(options[index]) === JSON.stringify(selected)) {
                 break;
             }
         }
         setSelectedI(index);
-    }, [selectedOption, options]);
+    }, [selected, options]);
 
     const handleLeftCaret = () => {
         const newSelectedIndex =
             selectedI - 1 < 0 ? options.length - 1 : selectedI - 1;
-
-        setSelectedOption(options[newSelectedIndex]);
+        setSelectedI(newSelectedIndex);
         onChange({ name, value: options[newSelectedIndex] });
     };
 
     const handleRightCaret = () => {
         const newSelectedIndex =
             selectedI + 1 >= options.length ? 0 : selectedI + 1;
-        setSelectedOption(options[newSelectedIndex]);
+        setSelectedI(newSelectedIndex);
         onChange({ name, value: options[newSelectedIndex] });
     };
 
@@ -39,7 +37,7 @@ const Selector = ({ name, options = [], selected, labelKey, onChange }) => {
             <button className="selector-btn" onClick={handleLeftCaret}>
                 <CaretLeft />
             </button>
-            <p className="selected-option">{selectedOption[labelKey]}</p>
+            <p className="selected-option">{options[selectedI][labelKey]}</p>
             <button className="selector-btn" onClick={handleRightCaret}>
                 <CaretRight />
             </button>
