@@ -1,5 +1,4 @@
 import "./avatar.css";
-import avatars from "./avatars";
 
 const Avatar = ({ id, label }) => {
     return (
