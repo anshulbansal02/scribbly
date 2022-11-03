@@ -5,7 +5,14 @@ import "./selector.css";
 import { ReactComponent as CaretLeft } from "./caret-left.svg";
 import { ReactComponent as CaretRight } from "./caret-right.svg";
 
-const Selector = ({ name, options = [], selected, labelKey, onChange }) => {
+const Selector = ({
+    name,
+    options = [],
+    selected,
+    labelKey,
+    onChange,
+    disabled,
+}) => {
     const [selectedI, setSelectedI] = useState(0);
 
     useEffect(() => {
@@ -34,13 +41,17 @@ const Selector = ({ name, options = [], selected, labelKey, onChange }) => {
 
     return (
         <div className="selector">
-            <button className="selector-btn" onClick={handleLeftCaret}>
-                <CaretLeft />
-            </button>
+            {disabled || (
+                <button className="selector-btn" onClick={handleLeftCaret}>
+                    <CaretLeft />
+                </button>
+            )}
             <p className="selected-option">{options[selectedI][labelKey]}</p>
-            <button className="selector-btn" onClick={handleRightCaret}>
-                <CaretRight />
-            </button>
+            {disabled || (
+                <button className="selector-btn" onClick={handleRightCaret}>
+                    <CaretRight />
+                </button>
+            )}
         </div>
     );
 };
