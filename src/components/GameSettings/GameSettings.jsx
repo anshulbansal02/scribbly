@@ -6,9 +6,11 @@ import { gameSettingsOptions } from "config";
 import { gameSettingsAtom } from "atoms";
 
 import { Selector } from "components";
+import { useIsAdmin } from "hooks";
 
 export default function GameSettings({ onChange }) {
     const [gameSettings, setGameSettings] = useAtom(gameSettingsAtom);
+    const isAdmin = useIsAdmin();
 
     const handleSettingsChange = (selected) => {
         const { name, value } = selected;
@@ -29,6 +31,7 @@ export default function GameSettings({ onChange }) {
                         options={gameSettingsOptions.difficulty.options}
                         selected={gameSettings.difficulty}
                         onChange={handleSettingsChange}
+                        disabled={!isAdmin}
                     />
                 </div>
                 <div className="setting">
@@ -39,6 +42,7 @@ export default function GameSettings({ onChange }) {
                         options={gameSettingsOptions.rounds.options}
                         selected={gameSettings.rounds}
                         onChange={handleSettingsChange}
+                        disabled={!isAdmin}
                     />
                 </div>
                 <div className="setting">
@@ -51,6 +55,7 @@ export default function GameSettings({ onChange }) {
                         options={gameSettingsOptions.drawingTime.options}
                         selected={gameSettings.drawingTime}
                         onChange={handleSettingsChange}
+                        disabled={!isAdmin}
                     />
                 </div>
             </div>
