@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { gameSettingsOptions } from "config";
 
 const roomPlayersAtom = atom([]);
-
+const playerAtom = atom(null);
 const roomOwnerAtom = atom(null);
 
 const gameSettingsAtom = atom({
@@ -18,6 +18,7 @@ const usernameAtom = atom(null);
 
 export {
     roomPlayersAtom,
+    playerAtom,
     roomOwnerAtom,
     gameSettingsAtom,
     roomIdAtom,
