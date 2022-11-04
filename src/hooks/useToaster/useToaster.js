@@ -30,7 +30,13 @@ export default function useToaster() {
                     toasts.filter((toast) => toast.id !== newToast.id)
                 );
             }, config.timeout ?? DEFAULT_TIMEOUT);
+
+            return toastId;
         };
+    }
+
+    function dismiss(toastId) {
+        setToasts((toasts) => toasts.filter((toast) => toast.id !== toastId));
     }
 
     const toasterMethods = {
@@ -40,6 +46,7 @@ export default function useToaster() {
         success: make(stylesConfig.success),
         info: make(stylesConfig.info),
         notification: make(stylesConfig.notification),
+        dismiss,
     };
 
     return toasterMethods;
