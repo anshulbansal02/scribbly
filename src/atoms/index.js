@@ -16,6 +16,8 @@ const roomJoinURLAtom = atom((get) => `scribbly.app/join/${get(roomIdAtom)}`);
 
 const usernameAtom = atom(null);
 
+const toastsAtom = atom([]);
+
 export {
     roomPlayersAtom,
     playerAtom,
@@ -24,4 +26,5 @@ export {
     roomIdAtom,
     roomJoinURLAtom,
     usernameAtom,
+    toastsAtom,
 };
