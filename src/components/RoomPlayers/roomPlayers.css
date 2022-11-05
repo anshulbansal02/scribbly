@@ -1,13 +1,10 @@
-.room-players {
-    /* background-color: aqua; */
-}
-
 .room-players h4 {
-    margin-bottom: 24px;
+    margin-bottom: 36px;
     font-size: 1.8rem;
 }
 
 .players-list {
     display: flex;
+    flex-flow: row wrap;
     gap: 36px;
 }

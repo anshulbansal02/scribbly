@@ -3,27 +3,35 @@
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    width: fit-content;
+    gap: 8px;
 }
 
-.avatar .avatar-img-container {
-    background-color: rgb(253, 225, 215);
+.avatar-img-container {
     width: 60px;
     height: 60px;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    display: grid;
+    place-items: center;
+
+    border-radius: 30px;
     overflow: hidden;
+    background-color: #fff;
 }
 
-.avatar .avatar-img {
-    width: 60%;
-    height: 60%;
+.avatar-bg {
+    position: absolute;
+    z-index: 1;
+    filter: blur(30px);
+}
+
+.avatar-img {
+    position: relative;
+    z-index: 2;
+    width: 70%;
+    height: 70%;
 }
 
 .avatar-label {
     font-size: 1.4rem;
-    margin-top: 4px;
     font-weight: 500;
 }

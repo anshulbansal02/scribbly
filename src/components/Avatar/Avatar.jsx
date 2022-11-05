@@ -5,6 +5,12 @@ const Avatar = ({ id, label }) => {
         <div className="avatar">
             <div className="avatar-img-container">
                 <img
+                    className="avatar-bg"
+                    draggable="false"
+                    src={`https://avatars.dicebear.com/api/bottts/${id}.svg`}
+                    alt={label}
+                />
+                <img
                     className="avatar-img"
                     draggable="false"
                     src={`https://avatars.dicebear.com/api/bottts/${id}.svg`}
