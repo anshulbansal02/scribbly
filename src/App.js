@@ -1,9 +1,12 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { useSetAtom } from "jotai";
 
 import router from "./routes";
 import { useSocket } from "contexts/SocketContext";
 import { useToaster } from "hooks";
+import { playerAtom } from "atoms";
+import IOEvents from "config/events";
 
 import { ToastContainer } from "components";
 
@@ -11,6 +14,8 @@ import "./App.css";
 
 export default function App() {
     const errorToast = useRef(null);
+
+    const setPlayer = useSetAtom(playerAtom);
 
     const socket = useSocket();
     const toaster = useToaster();
@@ -42,9 +47,14 @@ export default function App() {
             }
         });
 
+        socket.on(IOEvents.PLAYER_CREATE, ({ player }) => {
+            setPlayer(player);
+        });
+
         return () => {
             socket.off("connect");
             socket.off("connect_error");
+            socket.off(IOEvents.PLAYER_CREATE);
         };
     }, [socket]);
 
