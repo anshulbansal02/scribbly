@@ -8,7 +8,12 @@ import { useSetAtom } from "jotai";
 
 import { useInput, useToggle } from "hooks";
 import { useSocket } from "contexts/SocketContext";
-import { roomIdAtom, roomOwnerAtom, roomPlayersAtom, playerAtom } from "atoms";
+import {
+    roomIdAtom,
+    roomAdminIdAtom,
+    roomPlayersAtom,
+    playerAtom,
+} from "atoms";
 
 import IOEvents from "config/events";
 
@@ -29,15 +34,18 @@ export default function Home() {
     // Atoms State
     const setRoomId = useSetAtom(roomIdAtom);
     const setRoomPlayers = useSetAtom(roomPlayersAtom);
-    const setRoomOwner = useSetAtom(roomOwnerAtom);
+    const setRoomAdminId = useSetAtom(roomAdminIdAtom);
     const setPlayer = useSetAtom(playerAtom);
 
     useEffect(() => {
-        socket.on(IOEvents.ROOM_JOIN, ({ room, player }) => {
+        socket.on(IOEvents.ROOM_JOIN, ({ room }) => {
+            setPlayer((player) => ({
+                ...player,
+                username: usernameInput.value,
+            }));
             setRoomId(room.id);
             setRoomPlayers(room.players);
-            setRoomOwner(room.admin);
-            setPlayer(player);
+            setRoomAdminId(room.admin.id);
 
             navigate("/game");
         });

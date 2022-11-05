@@ -1,9 +1,14 @@
 import { atom } from "jotai";
 import { gameSettingsOptions } from "config";
 
+// Player Atoms
+const playerAtom = atom({});
+
+// Room Atoms
 const roomPlayersAtom = atom([]);
-const playerAtom = atom(null);
-const roomOwnerAtom = atom(null);
+const roomAdminIdAtom = atom(null);
+const roomIdAtom = atom(null);
+const roomJoinURLAtom = atom((get) => `scribbly.app/join/${get(roomIdAtom)}`);
 
 const gameSettingsAtom = atom({
     drawingTime: gameSettingsOptions.drawingTime.default,
@@ -11,20 +16,15 @@ const gameSettingsAtom = atom({
     difficulty: gameSettingsOptions.difficulty.default,
 });
 
-const roomIdAtom = atom(null);
-const roomJoinURLAtom = atom((get) => `scribbly.app/join/${get(roomIdAtom)}`);
-
-const usernameAtom = atom(null);
-
+// Misc Atoms
 const toastsAtom = atom([]);
 
 export {
     roomPlayersAtom,
     playerAtom,
-    roomOwnerAtom,
+    roomAdminIdAtom,
     gameSettingsAtom,
     roomIdAtom,
     roomJoinURLAtom,
-    usernameAtom,
     toastsAtom,
 };

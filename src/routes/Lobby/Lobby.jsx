@@ -17,17 +17,18 @@ const Lobby = () => {
     const socket = useSocket();
 
     useEffect(() => {
-        socket.on(IOEvents.ROOM_PLAYER_JOIN, (player) => {
+        socket.on(IOEvents.ROOM_PLAYER_JOIN, ({ player }) => {
             setPlayersInRoom((players) => [...players, player]);
         });
 
-        socket.on(IOEvents.ROOM_PLAYER_LEAVE, (player) => {
+        socket.on(IOEvents.ROOM_PLAYER_LEAVE, ({ player }) => {
+            console.log("ROOM PLAYER LEAVE: ", player);
             setPlayersInRoom((players) =>
                 players.filter((playerInRoom) => player.id !== playerInRoom.id)
             );
         });
 
-        socket.on(IOEvents.GAME_SETTINGS_CHANGE, (settings) => {
+        socket.on(IOEvents.GAME_SETTINGS_CHANGE, ({ settings }) => {
             setGameSettings((prevSettings) => ({
                 ...prevSettings,
                 ...settings,
@@ -44,7 +45,7 @@ const Lobby = () => {
     const handleRoomExit = () => {};
 
     const handleGameSettingsChange = (settings) => {
-        socket.emit(IOEvents.GAME_SETTINGS_CHANGE, settings);
+        socket.emit(IOEvents.GAME_SETTINGS_CHANGE, { settings });
     };
 
     return (
