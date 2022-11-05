@@ -16,6 +16,10 @@ export default function useToaster() {
         setToasts((toasts) => [...toasts, toast]);
     }
 
+    function dismiss(toastId) {
+        setToasts((toasts) => toasts.filter((toast) => toast.id !== toastId));
+    }
+
     function make(defaultConfig) {
         return (config) => {
             if (typeof config !== "object") {
@@ -25,18 +29,14 @@ export default function useToaster() {
 
             addToQueue(newToast);
 
-            setTimeout(() => {
-                setToasts((toasts) =>
-                    toasts.filter((toast) => toast.id !== newToast.id)
-                );
-            }, config.timeout ?? DEFAULT_TIMEOUT);
+            if (!config.persistant) {
+                setTimeout(() => {
+                    dismiss(newToast.id);
+                }, config.timeout ?? DEFAULT_TIMEOUT);
+            }
 
-            return toastId;
+            return newToast.id;
         };
-    }
-
-    function dismiss(toastId) {
-        setToasts((toasts) => toasts.filter((toast) => toast.id !== toastId));
     }
 
     const toasterMethods = {
