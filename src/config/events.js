@@ -8,6 +8,7 @@ const Events = {
     ROOM_INFO: "room:info", // S
     ROOM_LEAVE: "room:leave", // C
     ROOM_KICK: "room:kick", // S,C
+    ROOM_NON_EXISTANT: "room:non_existant",
 
     GAME_SETTINGS_CHANGE: "game:settings_change", // S,C
     GAME_START: "game:start", // S,C

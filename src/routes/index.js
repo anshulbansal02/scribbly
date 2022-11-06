@@ -3,6 +3,7 @@ import Room from "./Room/Room";
 import FourOhFour from "./FourOhFour/FourOhFour";
 
 import { createBrowserRouter } from "react-router-dom";
+import Join from "./Join/Join";
 
 const router = createBrowserRouter([
     {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
     {
         path: "/game",
         element: <Room />,
+    },
+    {
+        path: "/join/:roomId",
+        element: <Join />,
     },
 ]);
 

@@ -21,7 +21,7 @@ import {
 } from "components";
 import { useToggle } from "hooks";
 
-const Lobby = () => {
+export default function Lobby() {
     const roomJoinURL = useAtomValue(roomJoinURLAtom);
     const setGameSettings = useSetAtom(gameSettingsAtom);
     const resetRoom = useSetAtom(resetRoomAtom);
@@ -97,6 +97,4 @@ const Lobby = () => {
             </Modal>
         </Page>
     );
-};
-
-export default Lobby;
+}
