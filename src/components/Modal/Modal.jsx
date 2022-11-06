@@ -1,17 +1,19 @@
 import "./modal.css";
 
-const Modal = ({ isOpen, children, onOutsideClick = () => {} }) => {
+import { createPortal } from "react-dom";
+
+const Modal = ({ isOpen, children, onOutsideClick }) => {
     const handleOutsideClick = (e) => {
-        if (e.target === e.currentTarget) onOutsideClick();
+        if (e.target === e.currentTarget && onOutsideClick) onOutsideClick();
     };
 
-    return (
-        <div
-            className={`modal-container ${isOpen ? "" : "closed"}`}
-            onClick={handleOutsideClick}
-        >
-            <div className="modal">{children}</div>
-        </div>
+    return createPortal(
+        isOpen ? (
+            <div className="modal-overlay" onClick={handleOutsideClick}>
+                <div className="modal">{children}</div>
+            </div>
+        ) : null,
+        document.getElementById("portal")
     );
 };
 
