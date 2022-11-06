@@ -14,7 +14,7 @@ import {
 
 import {
     Page,
-    TextShare,
+    TextAction,
     GameSettings,
     RoomPlayers,
     Button,
@@ -80,7 +80,13 @@ const Lobby = () => {
                 <GameSettings onChange={handleGameSettingsChange} />
                 <RoomPlayers />
             </div>
-            <TextShare text={roomJoinURL} />
+
+            <div className="invite-box">
+                <h5>
+                    Share this link with others to invite them to this room.
+                </h5>
+                <TextAction text={roomJoinURL} />
+            </div>
 
             <div className="btn-group">
                 <Button className="green" onClick={handleRoomJoin}>

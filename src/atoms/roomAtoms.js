@@ -36,6 +36,7 @@ const resetRoomAtom = atom(null, (get, set, update) => {
     set(roomAdminIdAtom, null);
     set(roomPlayersAtom, []);
     set(playerUsernameAtom, null);
+    set(gameSettingsAtom, {});
 });
 
 export {

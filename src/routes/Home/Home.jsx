@@ -114,7 +114,7 @@ export default function Home() {
                 onOutsideClick={toggleRoomCodeModal}
                 className="room-code-modal"
             >
-                <h4>What's your room code?</h4>
+                <h4>Hello {usernameInput.value}, What's your room code?</h4>
                 <Input
                     type="text"
                     placeholder="Room Code"
