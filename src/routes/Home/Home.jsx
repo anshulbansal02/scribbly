@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useSetAtom } from "jotai";
 
-import { useInput, useToaster, useToggle } from "hooks";
+import { useInput, useToggle } from "hooks";
 import { useSocket } from "contexts/SocketContext";
 
 import { playerUsernameAtom } from "atoms/playerAtoms";
@@ -45,12 +45,9 @@ export default function Home() {
         };
     }, [socket]);
 
-    const toaster = useToaster();
-
     // Handlers
     const handlePlayNow = () => {
         // Implementation Deferred
-        toaster.toast("hello world");
     };
 
     const handleNewRoom = () => {
@@ -115,22 +112,21 @@ export default function Home() {
             <Modal
                 isOpen={roomCodeModalOpen}
                 onOutsideClick={toggleRoomCodeModal}
+                className="room-code-modal"
             >
-                <div className="room-code-modal">
-                    <h4>What's your room code?</h4>
-                    <Input
-                        type="text"
-                        placeholder="Room Code"
-                        spellCheck="false"
-                        className="mono-input"
-                        error={roomCodeInputError}
-                        {...roomCodeInput}
-                    />
-                    <Button onClick={handleRoomJoin} className="green">
-                        Lessgo
-                    </Button>
-                    <Button onClick={toggleRoomCodeModal}>Cancel</Button>
-                </div>
+                <h4>What's your room code?</h4>
+                <Input
+                    type="text"
+                    placeholder="Room Code"
+                    spellCheck="false"
+                    error={roomCodeInputError}
+                    {...roomCodeInput}
+                    autoFocus
+                />
+                <Button onClick={handleRoomJoin} className="green">
+                    Lessgo
+                </Button>
+                <Button onClick={toggleRoomCodeModal}>Cancel</Button>
             </Modal>
         </Page>
     );

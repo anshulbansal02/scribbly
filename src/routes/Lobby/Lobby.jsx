@@ -1,6 +1,6 @@
 import "./lobby.css";
 
-import { useAtomValue, useSetAtom, useAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
 import { useSocket } from "contexts/SocketContext";
@@ -26,7 +26,7 @@ const Lobby = () => {
     const roomJoinURL = useAtomValue(roomJoinURLAtom);
     const setPlayersInRoom = useSetAtom(roomPlayersAtom);
     const setGameSettings = useSetAtom(gameSettingsAtom);
-    const resetRoom = useAtom(resetRoomAtom);
+    const resetRoom = useSetAtom(resetRoomAtom);
 
     const [exitRoomModal, toggleExitRoomModal] = useToggle();
 
