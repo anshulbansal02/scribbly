@@ -18,9 +18,7 @@ const Selector = ({
     useEffect(() => {
         let index = 0;
         for (; index < options.length; index++) {
-            if (JSON.stringify(options[index]) === JSON.stringify(selected)) {
-                break;
-            }
+            if (options[index].value === selected) break;
         }
         setSelectedI(index);
     }, [selected, options]);
@@ -29,14 +27,14 @@ const Selector = ({
         const newSelectedIndex =
             selectedI - 1 < 0 ? options.length - 1 : selectedI - 1;
         setSelectedI(newSelectedIndex);
-        onChange({ name, value: options[newSelectedIndex] });
+        onChange({ name, value: options[newSelectedIndex].value });
     };
 
     const handleRightCaret = () => {
         const newSelectedIndex =
             selectedI + 1 >= options.length ? 0 : selectedI + 1;
         setSelectedI(newSelectedIndex);
-        onChange({ name, value: options[newSelectedIndex] });
+        onChange({ name, value: options[newSelectedIndex].value });
     };
 
     return (
