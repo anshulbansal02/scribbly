@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useSetAtom } from "jotai";
 
-import { useInput, useToggle } from "hooks";
+import { useInput, useToaster, useToggle } from "hooks";
 import { useSocket } from "contexts/SocketContext";
 
 import { playerUsernameAtom } from "atoms/playerAtoms";
@@ -45,9 +45,12 @@ export default function Home() {
         };
     }, [socket]);
 
+    const toaster = useToaster();
+
     // Handlers
     const handlePlayNow = () => {
         // Implementation Deferred
+        toaster.toast("hello world");
     };
 
     const handleNewRoom = () => {

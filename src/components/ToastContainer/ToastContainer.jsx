@@ -1,7 +1,7 @@
 import "./toastContainer.css";
 
 import { createPortal } from "react-dom";
-import { useAtomValue, useAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 
 import { toastsAtom, popToastAtom } from "atoms/toastAtoms";
 
@@ -9,7 +9,7 @@ import Toast from "../Toast/Toast";
 
 export default function ToastContainer() {
     const toastsList = useAtomValue(toastsAtom);
-    const popToast = useAtom(popToastAtom);
+    const popToast = useSetAtom(popToastAtom);
 
     const handleToastDismiss = (toastId) => {
         popToast(toastId);

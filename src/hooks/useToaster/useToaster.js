@@ -1,5 +1,5 @@
 import { pushToastAtom, popToastAtom } from "atoms/toastAtoms";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { nanoid } from "nanoid";
 import stylesConfig from "./toastDefaultStyles";
 
@@ -10,8 +10,8 @@ function toastId() {
 const DEFAULT_TIMEOUT = 2500;
 
 export default function useToaster() {
-    const pushToast = useAtom(pushToastAtom);
-    const popToast = useAtom(popToastAtom);
+    const pushToast = useSetAtom(pushToastAtom);
+    const popToast = useSetAtom(popToastAtom);
 
     function make(defaultConfig) {
         return (config) => {

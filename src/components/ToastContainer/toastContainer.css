@@ -7,10 +7,12 @@
     z-index: 999;
 
     padding: 24px;
+    gap: 12px;
 
-    display: grid;
-    align-items: end;
-    justify-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: end;
+    align-items: center;
 
     pointer-events: none;
 }
