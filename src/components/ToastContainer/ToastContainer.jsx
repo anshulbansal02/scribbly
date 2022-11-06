@@ -1,5 +1,7 @@
 import "./toastContainer.css";
 
+import { createPortal } from "react-dom";
+
 import { useAtom } from "jotai";
 import { toastsAtom } from "atoms";
 
@@ -14,7 +16,7 @@ export default function ToastContainer() {
         );
     };
 
-    return (
+    return createPortal(
         <div className="toast-container">
             {toastsList.map((toastConfig) => (
                 <Toast
@@ -23,6 +25,7 @@ export default function ToastContainer() {
                     onDismiss={handleToastDismiss}
                 />
             ))}
-        </div>
+        </div>,
+        document.getElementById("portal")
     );
 }
