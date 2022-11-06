@@ -1,18 +1,34 @@
 import "./lobby.css";
 
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { useEffect } from "react";
 
 import { useSocket } from "contexts/SocketContext";
 import IOEvents from "config/events";
-import { gameSettingsAtom, roomJoinURLAtom, roomPlayersAtom } from "atoms";
+import {
+    gameSettingsAtom,
+    resetRoomAtom,
+    roomJoinURLAtom,
+    roomPlayersAtom,
+} from "atoms/roomAtoms";
 
-import { Page, TextShare, GameSettings, RoomPlayers, Button } from "components";
+import {
+    Page,
+    TextShare,
+    GameSettings,
+    RoomPlayers,
+    Button,
+    Modal,
+} from "components";
+import { useToggle } from "hooks";
 
 const Lobby = () => {
     const roomJoinURL = useAtomValue(roomJoinURLAtom);
     const setPlayersInRoom = useSetAtom(roomPlayersAtom);
     const setGameSettings = useSetAtom(gameSettingsAtom);
+    const resetRoom = useAtom(resetRoomAtom);
+
+    const [exitRoomModal, toggleExitRoomModal] = useToggle();
 
     const socket = useSocket();
 
@@ -22,7 +38,6 @@ const Lobby = () => {
         });
 
         socket.on(IOEvents.ROOM_PLAYER_LEAVE, ({ player }) => {
-            console.log("ROOM PLAYER LEAVE: ", player);
             setPlayersInRoom((players) =>
                 players.filter((playerInRoom) => player.id !== playerInRoom.id)
             );
@@ -37,12 +52,20 @@ const Lobby = () => {
 
         return () => {
             socket.off(IOEvents.ROOM_PLAYER_JOIN);
+            socket.off(IOEvents.ROOM_PLAYER_LEAVE);
             socket.off(IOEvents.GAME_SETTINGS_CHANGE);
         };
     }, [socket]);
 
     const handleRoomJoin = () => {};
-    const handleRoomExit = () => {};
+    const handleRoomExit = () => {
+        if (exitRoomModal) {
+            socket.emit(IOEvents.ROOM_LEAVE);
+            resetRoom();
+        } else {
+            toggleExitRoomModal();
+        }
+    };
 
     const handleGameSettingsChange = (settings) => {
         socket.emit(IOEvents.GAME_SETTINGS_CHANGE, { settings });
@@ -65,6 +88,20 @@ const Lobby = () => {
                 </Button>
                 <Button onClick={handleRoomExit}>Exit Room</Button>
             </div>
+
+            <Modal
+                className="exit-room-modal"
+                isOpen={exitRoomModal}
+                onOutsideClick={toggleExitRoomModal}
+            >
+                <h4>Do you really want to exit the room?</h4>
+                <div className="btn-group">
+                    <Button className="red" onClick={handleRoomExit}>
+                        Yes, Exit
+                    </Button>
+                    <Button onClick={toggleExitRoomModal}>Noooo</Button>
+                </div>
+            </Modal>
         </Page>
     );
 };

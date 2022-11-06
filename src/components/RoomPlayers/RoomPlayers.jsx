@@ -4,7 +4,7 @@ import { useAtomValue } from "jotai";
 
 import { Avatar } from "components";
 
-import { roomPlayersAtom } from "atoms";
+import { roomPlayersAtom } from "atoms/roomAtoms";
 
 export default function RoomPlayers() {
     const playersInRoom = useAtomValue(roomPlayersAtom);

@@ -1,5 +1,5 @@
-import { toastsAtom } from "atoms";
-import { useSetAtom } from "jotai";
+import { pushToastAtom, popToastAtom } from "atoms/toastAtoms";
+import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 import stylesConfig from "./toastDefaultStyles";
 
@@ -10,15 +10,8 @@ function toastId() {
 const DEFAULT_TIMEOUT = 2500;
 
 export default function useToaster() {
-    const setToasts = useSetAtom(toastsAtom);
-
-    function addToQueue(toast) {
-        setToasts((toasts) => [...toasts, toast]);
-    }
-
-    function dismiss(toastId) {
-        setToasts((toasts) => toasts.filter((toast) => toast.id !== toastId));
-    }
+    const pushToast = useAtom(pushToastAtom);
+    const popToast = useAtom(popToastAtom);
 
     function make(defaultConfig) {
         return (config) => {
@@ -27,11 +20,11 @@ export default function useToaster() {
             }
             const newToast = { ...defaultConfig, ...config, id: toastId() };
 
-            addToQueue(newToast);
+            pushToast(newToast);
 
             if (!config.persistant) {
                 setTimeout(() => {
-                    dismiss(newToast.id);
+                    popToast(newToast.id);
                 }, config.timeout ?? DEFAULT_TIMEOUT);
             }
 
@@ -46,7 +39,7 @@ export default function useToaster() {
         success: make(stylesConfig.success),
         info: make(stylesConfig.info),
         notification: make(stylesConfig.notification),
-        dismiss,
+        dismiss: popToast,
     };
 
     return toasterMethods;

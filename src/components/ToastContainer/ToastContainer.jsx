@@ -1,19 +1,18 @@
 import "./toastContainer.css";
 
 import { createPortal } from "react-dom";
+import { useAtomValue, useAtom } from "jotai";
 
-import { useAtom } from "jotai";
-import { toastsAtom } from "atoms";
+import { toastsAtom, popToastAtom } from "atoms/toastAtoms";
 
 import Toast from "../Toast/Toast";
 
 export default function ToastContainer() {
-    const [toastsList, setToastsList] = useAtom(toastsAtom);
+    const toastsList = useAtomValue(toastsAtom);
+    const popToast = useAtom(popToastAtom);
 
     const handleToastDismiss = (toastId) => {
-        setToastsList((toasts) =>
-            toasts.filter((toast) => toast.id !== toastId)
-        );
+        popToast(toastId);
     };
 
     return createPortal(

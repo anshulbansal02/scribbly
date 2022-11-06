@@ -3,7 +3,7 @@ import "./gameSettings.css";
 import { useAtom } from "jotai";
 
 import { gameSettingsOptions } from "config";
-import { gameSettingsAtom } from "atoms";
+import { gameSettingsAtom } from "atoms/roomAtoms";
 
 import { Selector } from "components";
 import { useIsAdmin } from "hooks";
