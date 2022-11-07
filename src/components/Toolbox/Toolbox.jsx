@@ -1,15 +1,5 @@
-const Toolbox = () => {
-    return <div>Toolbox</div>;
-};
+import "./toolbox.css";
 
-export default Toolbox;
-
-/*
-Color Selector
-Stroke Width selector
-Tool selector (brush, eraser, bucket)
-Undo, Redo
-clear 
-save
-
-*/
+export default function Toolbox() {
+    return <div className="toolbox">Toolbox</div>;
+}

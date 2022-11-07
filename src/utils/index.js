@@ -1,7 +1,7 @@
 function getEventCoords(event) {
     return {
-        x: event.clientX - event.target.offsetLeft,
-        y: event.clientY - event.target.offsetTop,
+        x: Math.round(event.nativeEvent.offsetX) * window.devicePixelRatio,
+        y: Math.round(event.nativeEvent.offsetY) * window.devicePixelRatio,
     };
 }
 

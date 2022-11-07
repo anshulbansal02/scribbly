@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import { useSocket } from "contexts/SocketContext";
 
-const ChatBox = () => {
+const Chatbox = () => {
     const socket = useSocket();
 
     const [messageValue, setMessageValue] = useState("");
@@ -46,13 +46,4 @@ const ChatBox = () => {
     );
 };
 
-export default ChatBox;
-
-/*
-Message Structure 
-{
-    userId, messageId, message
-}
-
-
-*/
+export default Chatbox;
