@@ -1,16 +1,14 @@
 import { useEffect, useRef } from "react";
-import { getEventCoords } from "utils";
 
-import { useCommandHistory } from "atoms/commandHistoryAtoms";
+import { useCommandHistory } from "./useCommandHistory";
 
-function useCanvas(eventCallback = () => {}) {
+function useCanvas() {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
 
     const cmdHistory = useCommandHistory();
     let pathPoints = [];
 
-    let isTouched = false;
     let lastPoint = null;
 
     let color = "#000";
@@ -34,38 +32,7 @@ function useCanvas(eventCallback = () => {}) {
         color = strokeColor;
     };
 
-    // Event Handlers
-    const handleTouch = (e) => {
-        isTouched = true;
-
-        const point = getEventCoords(e);
-        lastPoint = point;
-        draw(point);
-
-        eventCallback({ event: "touch", data: { ...point, color, stroke } });
-    };
-
-    const handleDrag = (e) => {
-        if (isTouched) {
-            const point = getEventCoords(e);
-            draw(point);
-
-            eventCallback({ event: "draw", data: { ...point, color, stroke } });
-        }
-    };
-
-    const handleLift = (e) => {
-        if (isTouched) {
-            isTouched = false;
-
-            breakPath();
-
-            const point = getEventCoords(e);
-            eventCallback({ event: "lift", data: point });
-        }
-    };
-
-    function breakPath() {
+    function completeDraw() {
         lastPoint = null;
         cmdHistory.add({ cmd: "path", data: pathPoints });
         pathPoints = [];
@@ -102,10 +69,34 @@ function useCanvas(eventCallback = () => {}) {
         lastPoint = point;
     }
 
-    function redraw(history) {}
+    function redraw(history) {
+        clear();
+        for (const cmd of history) {
+            if (cmd.cmd === "path") {
+                for (const pathPt of cmd.data) {
+                    const { point, stroke, color } = pathPt;
+                    draw(point, stroke, color);
+                }
+                completeDraw();
+            } else if (cmd.cmd === "fill") {
+                const { point, color } = cmd.data;
+                fill(point, color);
+            } else if (cmd.cmd === "clear") {
+                clear();
+            }
+        }
+    }
 
     function undo() {
+        cmdHistory.disable();
         redraw(cmdHistory.undo());
+        cmdHistory.enable();
+    }
+
+    function redo() {
+        cmdHistory.disable();
+        redraw(cmdHistory.redo());
+        cmdHistory.enable();
     }
 
     function fill(point, fillColor = color) {
@@ -122,14 +113,16 @@ function useCanvas(eventCallback = () => {}) {
     return [
         canvasRef,
         {
-            onPointerDown: handleTouch,
-            onPointerMove: handleDrag,
-            onPointerUp: handleLift,
-            onPointerLeave: handleLift,
-            onPointerOut: handleLift,
-            onPointerCancel: handleLift,
+            draw,
+            fill,
+            clear,
+            undo,
+            redo,
+            setStroke,
+            setColor,
+            completeDraw,
+            redraw,
         },
-        { draw, fill, clear, undo, setStroke, setColor },
     ];
 }
 
