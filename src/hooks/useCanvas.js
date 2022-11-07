@@ -1,12 +1,14 @@
 import { useEffect, useRef } from "react";
 import { getEventCoords } from "utils";
 
+import { useCommandHistory } from "atoms/commandHistoryAtoms";
+
 function useCanvas(eventCallback = () => {}) {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
 
-    const canvasHistory = useRef([]);
-    let pathHistory = useRef([]);
+    const cmdHistory = useCommandHistory();
+    let pathPoints = [];
 
     let isTouched = false;
     let lastPoint = null;
@@ -56,14 +58,18 @@ function useCanvas(eventCallback = () => {}) {
         if (isTouched) {
             isTouched = false;
 
+            breakPath();
+
             const point = getEventCoords(e);
-
-            canvasHistory.current.push(pathHistory.current);
-            pathHistory.current = [];
-
             eventCallback({ event: "lift", data: point });
         }
     };
+
+    function breakPath() {
+        lastPoint = null;
+        cmdHistory.add({ cmd: "path", data: pathPoints });
+        pathPoints = [];
+    }
 
     // Canvas Manipulation Methods
     function draw(point, strokeWidth = stroke, strokeColor = color) {
@@ -79,7 +85,7 @@ function useCanvas(eventCallback = () => {}) {
         ctx.strokeStyle = strokeColor;
 
         // Push to path history
-        pathHistory.current.push({
+        pathPoints.push({
             point,
             stroke: strokeWidth,
             color: strokeColor,
@@ -96,33 +102,21 @@ function useCanvas(eventCallback = () => {}) {
         lastPoint = point;
     }
 
-    function breakPoint() {
-        lastPoint = null;
-    }
-
-    function redraw(history) {
-        clear();
-        for (const path of history) {
-            breakPoint();
-            for (const point of path) {
-                draw(point.point, point.stroke, point.color);
-            }
-        }
-    }
+    function redraw(history) {}
 
     function undo() {
-        if (!canvasHistory.current.length) return;
-        canvasHistory.current.pop();
-        redraw(canvasHistory.current);
+        redraw(cmdHistory.undo());
     }
 
     function fill(point, fillColor = color) {
+        cmdHistory.add({ cmd: "fill", data: { point, color: fillColor } });
         // Needs Implementation
     }
 
     function clear() {
         const ctx = ctxRef.current;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        cmdHistory.add({ cmd: "clear" });
     }
 
     return [
