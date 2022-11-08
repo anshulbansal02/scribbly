@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { hexToRgba } from "utils";
 
 import { useCommandHistory } from "./useCommandHistory";
 
@@ -99,9 +100,92 @@ function useCanvas() {
         cmdHistory.enable();
     }
 
+    function colorMatch(c1, c2, thresh = 1) {
+        return c1.R === c2.R && c1.G === c2.G && c1.B === c2.B;
+    }
+
     function fill(point, fillColor = color) {
         cmdHistory.add({ cmd: "fill", data: { point, color: fillColor } });
-        // Needs Implementation
+        const ctx = ctxRef.current;
+        const imageData = ctx.getImageData(
+            0,
+            0,
+            ctx.canvas.width,
+            ctx.canvas.height
+        );
+
+        function getPixelColor({ x, y }) {
+            const index = (y * imageData.width + x) * 4;
+            const k = {
+                R: imageData.data[index],
+                G: imageData.data[index + 1],
+                B: imageData.data[index + 2],
+                A: imageData.data[index + 3],
+            };
+            return k;
+        }
+
+        function setPixelColor({ x, y }, color) {
+            const index = (y * imageData.width + x) * 4;
+            imageData.data[index] = color.R;
+            imageData.data[index + 1] = color.G;
+            imageData.data[index + 2] = color.B;
+            imageData.data[index + 3] = color.A;
+        }
+
+        const initialColor = getPixelColor(point);
+        const finalColor = hexToRgba(fillColor);
+
+        const stack = [point];
+        while (stack.length) {
+            const pixel = stack.pop();
+
+            while (
+                pixel.y >= 0 &&
+                colorMatch(getPixelColor(pixel), initialColor)
+            ) {
+                pixel.y -= 1;
+            }
+            pixel.y += 1;
+
+            let reachLeft = false;
+            let reachRight = false;
+
+            while (
+                pixel.y <= ctx.canvas.height &&
+                colorMatch(getPixelColor(pixel), initialColor)
+            ) {
+                setPixelColor(pixel, finalColor);
+
+                // Check left pixel
+                if (pixel.x > 0) {
+                    const leftPixel = { x: pixel.x - 1, y: pixel.y };
+                    if (colorMatch(getPixelColor(leftPixel), initialColor)) {
+                        if (!reachLeft) {
+                            stack.push(leftPixel);
+                            reachLeft = true;
+                        }
+                    } else if (reachLeft) {
+                        reachLeft = false;
+                    }
+                }
+
+                // Check right pixel
+                if (pixel.x < ctx.canvas.width) {
+                    const rightPixel = { x: pixel.x + 1, y: pixel.y };
+                    if (colorMatch(getPixelColor(rightPixel), initialColor)) {
+                        if (!reachRight) {
+                            stack.push(rightPixel);
+                            reachRight = true;
+                        }
+                    } else if (reachRight) {
+                        reachRight = false;
+                    }
+                }
+
+                pixel.y += 1;
+            }
+        }
     }
 
     function clear() {

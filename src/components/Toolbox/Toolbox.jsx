@@ -18,6 +18,7 @@ export default function Toolbox() {
                         tool.value === selectedTool ? "tool selected" : "tool";
                     return (
                         <button
+                            key={tool.value}
                             className={isSelected}
                             onClick={() => setSelectedTool(tool.value)}
                         >
