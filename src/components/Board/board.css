@@ -50,6 +50,7 @@ canvas {
     /* Controlled Externally */
     width: 10px;
     height: 10px;
+    border: 1px solid #000;
     border-radius: 5px;
 
     left: -5px;
