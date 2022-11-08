@@ -12,7 +12,7 @@ function useCanvas() {
     let lastPoint = null;
 
     let color = "#000";
-    let stroke = 2;
+    let stroke = 20;
 
     // Initial Setup
     useEffect(() => {
