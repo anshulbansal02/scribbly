@@ -17,7 +17,7 @@ function hexToRgba(hex) {
             c = [c[0], c[0], c[1], c[1], c[2], c[2]];
         }
         c = "0x" + c.join("");
-        return { R: (c >> 16) & 255, G: (c >> 8) & 255, B: c & 255 };
+        return { R: (c >> 16) & 255, G: (c >> 8) & 255, B: c & 255, A: 255 };
     }
     throw new Error("Bad Hex");
 }

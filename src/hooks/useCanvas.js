@@ -13,7 +13,7 @@ function useCanvas() {
     let lastPoint = null;
 
     let color = "#000";
-    let stroke = 20;
+    let stroke = 10;
 
     // Initial Setup
     useEffect(() => {
@@ -101,7 +101,7 @@ function useCanvas() {
     }
 
     function colorMatch(c1, c2, thresh = 1) {
-        return c1.R === c2.R && c1.G === c2.G && c1.B === c2.B;
+        return c1.R === c2.R && c1.G === c2.G && c1.B === c2.B && c1.A === c2.A;
     }
 
     function fill(point, fillColor = color) {
@@ -116,13 +116,12 @@ function useCanvas() {
 
         function getPixelColor({ x, y }) {
             const index = (y * imageData.width + x) * 4;
-            const k = {
+            return {
                 R: imageData.data[index],
                 G: imageData.data[index + 1],
                 B: imageData.data[index + 2],
                 A: imageData.data[index + 3],
             };
-            return k;
         }
 
         function setPixelColor({ x, y }, color) {
@@ -139,7 +138,6 @@ function useCanvas() {
         const stack = [point];
         while (stack.length) {
             const pixel = stack.pop();
-
             while (
                 pixel.y >= 0 &&
                 colorMatch(getPixelColor(pixel), initialColor)
@@ -165,7 +163,7 @@ function useCanvas() {
                             stack.push(leftPixel);
                             reachLeft = true;
                         }
-                    } else if (reachLeft) {
+                    } else {
                         reachLeft = false;
                     }
                 }
@@ -178,7 +176,7 @@ function useCanvas() {
                             stack.push(rightPixel);
                             reachRight = true;
                         }
-                    } else if (reachRight) {
+                    } else {
                         reachRight = false;
                     }
                 }
@@ -186,6 +184,8 @@ function useCanvas() {
                 pixel.y += 1;
             }
         }
+
+        ctx.putImageData(imageData, 0, 0);
     }
 
     function clear() {
