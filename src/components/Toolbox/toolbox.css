@@ -1,11 +1,12 @@
 .toolbox {
-    width: 96px;
-    height: 100%;
+    flex: 0 0 88px;
+    align-self: flex-start;
+    padding: 48px 0;
+
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    justify-content: center;
-    gap: 36px;
+    gap: 48px;
 }
 
 .tool-selector {
@@ -16,20 +17,45 @@
     gap: 12px;
 }
 
-.tool-selector .icon-btn {
-    width: 48px;
-    height: 48px;
+.tool-selector .tool {
+    width: 42px;
+    height: 42px;
     display: grid;
     place-items: center;
-    cursor: pointer;
+
     background-color: #fff;
     border-width: 0;
     border-radius: 16px;
+
+    box-shadow: 0px;
+    transform: scale(1);
+
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
-.icon-btn svg {
-    width: 24px;
-    height: 24px;
+.tool svg {
+    width: 22px;
+    height: 22px;
+}
+
+.tool.selected {
+    background-color: #000;
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0px 0.5px 0.3px -3px rgba(0, 0, 0, 0.24),
+        0px 1.2px 0.8px -3px rgba(0, 0, 0, 0.173),
+        0px 2.3px 1.5px -3px rgba(0, 0, 0, 0.143),
+        0px 4px 2.7px -3px rgba(0, 0, 0, 0.12),
+        0px 7.5px 5px -3px rgba(0, 0, 0, 0.097),
+        0px 18px 12px -3px rgba(0, 0, 0, 0.067);
+}
+
+.color-selector {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 16px;
 }
 
 .palette {
@@ -37,24 +63,53 @@
     flex-flow: row wrap;
     align-items: center;
     justify-content: center;
-    max-width: 180px;
-    gap: 4px;
+
+    width: 80px;
+    gap: 8px;
 }
 
 .palette .color {
-    background-color: #000;
-    width: 28px;
-    height: 28px;
-    border-radius: 10px;
-    border: 4px solid #fff;
+    width: 24px;
+    height: 24px;
+
+    border-radius: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+
     cursor: pointer;
 }
 
+.selected-color {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 8px;
+    border: 4px solid #fff;
+    box-shadow: 0px 0.5px 0.3px -3px rgba(0, 0, 0, 0.24),
+        0px 1.2px 0.8px -3px rgba(0, 0, 0, 0.173),
+        0px 2.3px 1.5px -3px rgba(0, 0, 0, 0.143),
+        0px 4px 2.7px -3px rgba(0, 0, 0, 0.12),
+        0px 7.5px 5px -3px rgba(0, 0, 0, 0.097);
+
+    transition: all 0.25s ease-out;
+}
+
 @media only screen and (max-width: 920px) {
-    .toolbox {
-        width: 100%;
-        height: 96px;
+    .color-selector {
         flex-flow: row nowrap;
-        gap: 16px;
+    }
+
+    .toolbox {
+        padding: 0;
+        max-height: 88px;
+        flex-grow: 1;
+        flex-flow: row nowrap;
+        gap: 36px;
+    }
+
+    .palette {
+        flex-flow: row wrap;
+        justify-content: flex-start;
+
+        width: 180px;
     }
 }

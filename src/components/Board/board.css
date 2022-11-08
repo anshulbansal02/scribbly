@@ -39,16 +39,6 @@ canvas {
     height: 100%;
 }
 
-@media only screen and (max-width: 920px) {
-    .board {
-        flex-flow: column nowrap;
-    }
-
-    .canvas-container {
-        padding: 24px 24px 0 24px;
-    }
-}
-
 .canvas-pointer {
     position: absolute;
     display: none;
@@ -65,4 +55,16 @@ canvas {
     left: -5px;
     top: -5px;
     transform: translate3d(0, 0, 0);
+}
+
+@media only screen and (max-width: 920px) {
+    .board {
+        flex-flow: column nowrap;
+        padding: 24px;
+        padding-bottom: 0;
+    }
+
+    .canvas-container {
+        padding: 0;
+    }
 }

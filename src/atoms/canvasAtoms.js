@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-const selectedToolAtom = atom();
+const selectedToolAtom = atom("brush");
 const selectedColorAtom = atom();
 const selectedStrokeAtom = atom();
 
