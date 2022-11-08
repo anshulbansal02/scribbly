@@ -1,93 +1,74 @@
-import { useEffect, useState } from "react";
-import Canvas from "./../Canvas/Canvas";
+import "./board.css";
+
+import { useRef, useEffect } from "react";
+
 import useCanvas from "hooks/useCanvas";
+import { getEventCoords } from "utils";
 
-import { useSocket } from "contexts/SocketContext";
+function Board() {
+    const [canvasRef, canvas] = useCanvas();
+    const touchedRef = useRef(false);
 
-import Toolbox from "../Toolbox/Toolbox";
+    // Fit canvas to container
+    const canvasPaperRef = useRef(null);
+    const resizeCanvas = () => {
+        const { width, height } =
+            canvasPaperRef.current.getBoundingClientRect();
 
-import { getEventCoords, getNormalizedCoords } from "utils";
+        console.log(width * 2, height * 2);
 
-const Board = () => {
-    const { canvas, canvasRef } = useCanvas();
-    const [isTouched, setIsTouched] = useState(false);
-    const [isActive, setIsActive] = useState(true);
+        const pixelRatio = window.devicePixelRatio;
 
-    const socket = useSocket();
-
+        canvasRef.current.width = width * pixelRatio;
+        canvasRef.current.height = height * pixelRatio;
+    };
     useEffect(() => {
-        // Socket event handlers
-        socket.on("board-active", (isActive) => {
-            setIsActive(isActive);
-        });
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+        return () => {
+            window.removeEventListener("resize", resizeCanvas);
+        };
+    }, []);
 
-        socket.on("canvas-begin-draw", (data) => {
-            canvas.beginPath();
-
-            canvas.draw(
-                getNormalizedCoords(data.point),
-                data.stroke,
-                data.color
-            );
-        });
-
-        socket.on("canvas-draw", (data) => {
-            canvas.draw(
-                getNormalizedCoords(data.point),
-                data.stroke,
-                data.color
-            );
-        });
-
-        socket.on("canvas-fill", (data) => {
-            canvas.fill(getNormalizedCoords(data.point), data.color);
-        });
-
-        socket.on("canvas-clear", () => {
-            canvas.clear();
-        });
-    }, [socket, canvas]);
-
-    // Mouse and Touch event handlers
+    // Event Handlers
     const handleTouch = (e) => {
-        if (!isActive) return;
+        touchedRef.current = true;
 
-        setIsTouched(true);
-        canvas.beginPath();
-        const coords = getEventCoords(e);
-        canvas.draw(coords);
-
-        socket.emit("canvas-begin-draw", { point: coords });
+        const point = getEventCoords(e);
+        canvas.draw(point);
     };
 
     const handleDrag = (e) => {
-        if (!isActive) return;
-        if (isTouched) {
-            const coords = getEventCoords(e);
-            canvas.draw(coords);
-
-            socket.emit("canvas-draw", { point: coords });
+        if (touchedRef.current) {
+            const point = getEventCoords(e);
+            canvas.draw(point);
         }
     };
 
-    const handleLift = () => {
-        setIsTouched(false);
+    const handleLift = (e) => {
+        if (touchedRef.current) {
+            touchedRef.current = false;
+            canvas.completeDraw();
+        }
     };
 
     return (
-        <>
-            <h4>Drawing Canvas</h4>
-            <Canvas
-                reference={canvasRef}
-                width="600px"
-                height="300px"
-                onTouch={handleTouch}
-                onDrag={handleDrag}
-                onLift={handleLift}
-            />
-            <Toolbox />
-        </>
+        <div className="board">
+            <div className="canvas-container">
+                <div className="paper" ref={canvasPaperRef}>
+                    <canvas
+                        ref={canvasRef}
+                        onPointerDown={handleTouch}
+                        onPointerMove={handleDrag}
+                        onPointerUp={handleLift}
+                        onPointerOut={handleLift}
+                        onPointerCancel={handleLift}
+                    />
+                </div>
+            </div>
+            <div className="toolbox">Toolbox</div>
+        </div>
     );
-};
+}
 
 export default Board;
