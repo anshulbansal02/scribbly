@@ -1,3 +1,4 @@
+import { ToolsEnum } from "components/Board/config";
 import { ReactComponent as BrushIcon } from "./icons/brush.svg";
 import { ReactComponent as BucketIcon } from "./icons/bucket.svg";
 import { ReactComponent as EraserIcon } from "./icons/eraser.svg";
@@ -5,19 +6,21 @@ import { ReactComponent as EraserIcon } from "./icons/eraser.svg";
 const tools = [
     {
         component: <BrushIcon />,
-        value: "brush",
+        value: ToolsEnum.BRUSH,
     },
     {
         component: <BucketIcon />,
-        value: "bucket",
+        value: ToolsEnum.BUCKET,
     },
     {
         component: <EraserIcon />,
-        value: "eraser",
+        value: ToolsEnum.ERASER,
     },
 ];
 
 const colors = [
+    "#000000",
+    "#888888",
     "#EA2027",
     "#EE5A24",
     "#FFC312",
