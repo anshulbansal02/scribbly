@@ -6,7 +6,11 @@ import { selectedColorAtom, selectedToolAtom } from "atoms/canvasAtoms";
 
 import { tools, colors } from "./toolsConfig";
 
-export default function Toolbox() {
+import { ReactComponent as TrashIcon } from "./icons/trash.svg";
+import { ReactComponent as UndoIcon } from "./icons/undo.svg";
+import { ReactComponent as RedoIcon } from "./icons/redo.svg";
+
+export default function Toolbox({ genericHandler }) {
     const [selectedColor, setSelectedColor] = useAtom(selectedColorAtom);
     const [selectedTool, setSelectedTool] = useAtom(selectedToolAtom);
 
@@ -43,6 +47,23 @@ export default function Toolbox() {
                         />
                     ))}
                 </div>
+            </div>
+
+            <div className="misc-tools">
+                <button className="tool" onClick={() => genericHandler("undo")}>
+                    <UndoIcon />
+                </button>
+
+                <button className="tool" onClick={() => genericHandler("redo")}>
+                    <RedoIcon />
+                </button>
+
+                <button
+                    className="tool"
+                    onClick={() => genericHandler("clear")}
+                >
+                    <TrashIcon />
+                </button>
             </div>
         </div>
     );

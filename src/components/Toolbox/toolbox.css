@@ -93,6 +93,20 @@
     transition: all 0.25s ease-out;
 }
 
+.misc-tools {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 24px;
+}
+
+.misc-tools button {
+    display: grid;
+    place-items: center;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 920px) {
     .color-selector {
         flex-flow: row nowrap;
@@ -103,13 +117,17 @@
         max-height: 88px;
         flex-grow: 1;
         flex-flow: row nowrap;
-        gap: 36px;
+        gap: 24px;
     }
 
     .palette {
         flex-flow: row wrap;
         justify-content: flex-start;
 
-        width: 180px;
+        width: 200px;
+    }
+
+    .misc-tools {
+        flex-flow: row nowrap;
     }
 }
