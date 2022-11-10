@@ -5,8 +5,13 @@ import { useRef, useEffect } from "react";
 import useCanvas from "hooks/useCanvas";
 import { getEventCoords } from "utils";
 import { Toolbox } from "components";
-import { useAtomValue } from "jotai";
-import { selectedColorAtom, selectedToolAtom } from "atoms/canvasAtoms";
+import { useAtom, useAtomValue } from "jotai";
+import {
+    selectedColorAtom,
+    selectedStrokeAtom,
+    selectedToolAtom,
+} from "atoms/canvasAtoms";
+import { BrushModeEnum, ToolsEnum } from "./config";
 
 function Board() {
     const [canvasRef, canvas] = useCanvas();
@@ -15,21 +20,38 @@ function Board() {
 
     const touchedRef = useRef(false);
 
+    // Canvas State
     const selectedColor = useAtomValue(selectedColorAtom);
     const selectedTool = useAtomValue(selectedToolAtom);
+    const selectedStroke = useAtomValue(selectedStrokeAtom);
 
-    // Selected Tool/Color Change
     useEffect(() => {
-        if (selectedTool === "brush") {
-            canvas.setColor(selectedColor);
-        } else if (selectedTool === "eraser") {
-            canvas.setColor("#fff");
-        } else if (selectedColor === "bucket") {
+        canvas.setColor(selectedColor);
+        canvas.setStroke(selectedStroke);
+
+        const pointerStyle = pointerRef.current.style;
+
+        const pointerSize = selectedStroke / 2;
+        pointerStyle.width = `${pointerSize}px`;
+        pointerStyle.height = `${pointerSize}px`;
+        pointerStyle.top = `-${pointerSize / 2}px`;
+        pointerStyle.left = `-${pointerSize / 2}px`;
+
+        if (selectedTool === ToolsEnum.ERASER) {
+            canvas.setBrushMode(BrushModeEnum.ERASE);
+
+            pointerStyle.backgroundColor = "#fff";
+            pointerStyle.borderWidth = "1px";
+            pointerStyle.opacity = 0.8;
+        } else {
+            canvas.setBrushMode(BrushModeEnum.PAINT);
+            pointerStyle.backgroundColor = selectedColor;
+            pointerStyle.borderWidth = 0;
+            pointerStyle.opacity = 0.5;
         }
-    }, [selectedColor, canvas, selectedTool]);
+    }, [canvas, selectedColor, selectedTool, selectedStroke]);
 
     // Fit canvas to container
-
     useEffect(() => {
         function resizeCanvas() {
             const { width, height } =
@@ -49,23 +71,29 @@ function Board() {
 
     // Canvas Events
     const handleTouch = (e) => {
-        touchedRef.current = true;
-
         const point = getEventCoords(e);
-        canvas.draw(point);
+        if (
+            selectedTool === ToolsEnum.BRUSH ||
+            selectedTool === ToolsEnum.ERASER
+        ) {
+            touchedRef.current = true;
+            canvas.drawPath(point);
+        } else if (selectedTool === ToolsEnum.BUCKET) {
+            canvas.fill(point);
+        }
     };
 
     const handleDrag = (e) => {
         if (touchedRef.current) {
             const point = getEventCoords(e);
-            canvas.draw(point);
+            canvas.drawPath(point);
         }
     };
 
     const handleLift = (e) => {
         if (touchedRef.current) {
             touchedRef.current = false;
-            canvas.completeDraw();
+            canvas.completePath();
         }
     };
 
@@ -83,15 +111,6 @@ function Board() {
     function showPointer() {
         const pointerStyle = pointerRef.current.style;
         pointerStyle.display = "block";
-        if (selectedTool === "eraser") {
-            pointerStyle.backgroundColor = "#fff";
-            pointerStyle.borderWidth = "1px";
-            pointerStyle.opacity = 0.8;
-        } else {
-            pointerStyle.backgroundColor = selectedColor;
-            pointerStyle.borderWidth = 0;
-            pointerStyle.opacity = 0.5;
-        }
     }
 
     return (
