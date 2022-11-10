@@ -22,4 +22,39 @@ function hexToRgba(hex) {
     throw new Error("Bad Hex");
 }
 
-export { getEventCoords, getNormalizedCoords, hexToRgba };
+function colorMatch(c1, c2, thresh = 1) {
+    return c1.R === c2.R && c1.G === c2.G && c1.B === c2.B && c1.A === c2.A;
+}
+
+function coordsToIndex(point, imageWidth) {
+    return (point.y * imageWidth + point.x) * 4;
+}
+
+function getPixelColor(point, imageData) {
+    const index = coordsToIndex(point, imageData.width);
+    return {
+        R: imageData.data[index],
+        G: imageData.data[index + 1],
+        B: imageData.data[index + 2],
+        A: imageData.data[index + 3],
+    };
+}
+
+function setPixelColor(point, color, imageData) {
+    const index = coordsToIndex(point, imageData.width);
+    imageData.data[index] = color.R;
+    imageData.data[index + 1] = color.G;
+    imageData.data[index + 2] = color.B;
+    imageData.data[index + 3] = color.A;
+    return index;
+}
+
+export {
+    getEventCoords,
+    getNormalizedCoords,
+    hexToRgba,
+    colorMatch,
+    getPixelColor,
+    setPixelColor,
+    coordsToIndex,
+};
