@@ -1,30 +1,38 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 const useCommandHistory = () => {
-    const [undoStack, setUndoStack] = useState([]);
-    const [redoStack, setRedoStack] = useState([]);
+    const undoStack = useRef([]);
+    const redoStack = useRef([]);
     const isEnabled = useRef(true);
 
-    const add = (cmd) => {
+    const lastCmd = () => {
+        return undoStack.current.at(-1);
+    };
+
+    const add = (cmd, data, options) => {
         if (isEnabled.current) {
-            setUndoStack((undoStack) => [...undoStack, cmd]);
-            setRedoStack([]);
+            undoStack.current.push({ cmd, data });
+            redoStack.current.length = 0;
         }
-        return [...undoStack, cmd];
+        return undoStack.current;
     };
 
     const undo = () => {
-        const undoCmd = undoStack.at(-1);
-        setRedoStack((redoStack) => [...redoStack, undoCmd]);
-        setUndoStack((undoStack) => undoStack.slice(0, -1));
-        return undoStack.slice(0, -1);
+        if (undoStack.current.length) {
+            const undoCmd = undoStack.current.pop();
+            redoStack.current.push(undoCmd);
+        }
+
+        return undoStack.current;
     };
 
     const redo = () => {
-        const redoCmd = redoStack.at(-1);
-        setUndoStack((undoStack) => [...undoStack, redoCmd]);
-        setRedoStack((redoStack) => redoStack.slice(0, -1));
-        return [...undoStack, redoCmd];
+        if (redoStack.current.length) {
+            const redoCmd = redoStack.current.pop();
+            undoStack.current.push(redoCmd);
+        }
+
+        return undoStack.current;
     };
 
     const disable = () => {
@@ -35,7 +43,12 @@ const useCommandHistory = () => {
         isEnabled.current = true;
     };
 
-    return { redo, undo, add, enable, disable };
+    const clear = () => {
+        undoStack.current.length = 0;
+        redoStack.current.length = 0;
+    };
+
+    return { redo, undo, add, enable, disable, clear, lastCmd };
 };
 
 export { useCommandHistory };

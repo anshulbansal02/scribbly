@@ -9,4 +9,19 @@ const BrushModeEnum = Object.freeze({
     ERASE: 1,
 });
 
-export { ToolsEnum, BrushModeEnum };
+const CanvasCommandEnum = Object.freeze({
+    // Overlapping
+    SET_COLOR: 0,
+    SET_STROKE: 1,
+    SET_BRUSH_MODE: 2,
+    // Clubbing
+    DRAW_PATH: 3,
+    COMPLETE_PATH: 4,
+    FILL: 5,
+    CLEAR: 6,
+    // Ignorable
+    UNDO: 7,
+    REDO: 8,
+});
+
+export { ToolsEnum, BrushModeEnum, CanvasCommandEnum };

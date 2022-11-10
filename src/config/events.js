@@ -22,10 +22,7 @@ const Events = {
     GAME_END: "game:end", // S
     GAME_SCORE: "game:score", // S
 
-    CANVAS_BEGIN_DRAW: "canvas:begin_draw", // S,C
-    CANVAS_DRAW: "canvas:draw", // S,C
-    CANVAS_FILL: "canvas:fill", // S,C
-    CANVAS_CLEAR: "canvas:clear", // S,C
+    CANVAS: "canvas", // S,C
 
     CHAT_MESSAGE: "chat:message", // S,C
     CHAT_GUESS: "chat:guess", // S

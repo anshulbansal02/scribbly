@@ -2,19 +2,19 @@ import "./board.css";
 
 import { useRef, useEffect } from "react";
 
-import useCanvas from "hooks/useCanvas";
 import { getEventCoords } from "utils";
 import { Toolbox } from "components";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import {
     selectedColorAtom,
     selectedStrokeAtom,
     selectedToolAtom,
 } from "atoms/canvasAtoms";
 import { BrushModeEnum, ToolsEnum } from "./config";
+import useConnectedCanvas from "./useConnectedCanvas";
 
 function Board() {
-    const [canvasRef, canvas] = useCanvas();
+    const [canvasRef, canvas] = useConnectedCanvas();
     const canvasPaperRef = useRef(null);
     const pointerRef = useRef(null);
 
@@ -27,29 +27,25 @@ function Board() {
 
     useEffect(() => {
         canvas.setColor(selectedColor);
+    }, [canvas, selectedColor]);
+
+    useEffect(() => {
         canvas.setStroke(selectedStroke);
-
         const pointerStyle = pointerRef.current.style;
-
         const pointerSize = selectedStroke / 2;
         pointerStyle.width = `${pointerSize}px`;
         pointerStyle.height = `${pointerSize}px`;
         pointerStyle.top = `-${pointerSize / 2}px`;
         pointerStyle.left = `-${pointerSize / 2}px`;
+    }, [canvas, selectedStroke]);
 
+    useEffect(() => {
         if (selectedTool === ToolsEnum.ERASER) {
             canvas.setBrushMode(BrushModeEnum.ERASE);
-
-            pointerStyle.backgroundColor = "#fff";
-            pointerStyle.borderWidth = "1px";
-            pointerStyle.opacity = 0.8;
         } else {
             canvas.setBrushMode(BrushModeEnum.PAINT);
-            pointerStyle.backgroundColor = selectedColor;
-            pointerStyle.borderWidth = 0;
-            pointerStyle.opacity = 0.5;
         }
-    }, [canvas, selectedColor, selectedTool, selectedStroke]);
+    }, [canvas, selectedTool]);
 
     // Fit canvas to container
     useEffect(() => {
@@ -111,6 +107,15 @@ function Board() {
     function showPointer() {
         const pointerStyle = pointerRef.current.style;
         pointerStyle.display = "block";
+        if (selectedTool === ToolsEnum.ERASER) {
+            pointerStyle.backgroundColor = "#fff";
+            pointerStyle.borderWidth = "1px";
+            pointerStyle.opacity = 0.8;
+        } else {
+            pointerStyle.backgroundColor = selectedColor;
+            pointerStyle.borderWidth = 0;
+            pointerStyle.opacity = 0.5;
+        }
     }
 
     return (
