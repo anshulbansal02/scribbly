@@ -24,4 +24,19 @@ const CanvasCommandEnum = Object.freeze({
     REDO: 8,
 });
 
-export { ToolsEnum, BrushModeEnum, CanvasCommandEnum };
+const CanvasCommandLookup = {
+    [CanvasCommandEnum.SET_COLOR]: { method: "setColor" },
+    [CanvasCommandEnum.SET_STROKE]: { method: "setStroke" },
+    [CanvasCommandEnum.SET_BRUSH_MODE]: { method: "setBrushMode" },
+    [CanvasCommandEnum.DRAW_PATH]: { undoable: true, method: "drawPath" },
+    [CanvasCommandEnum.COMPLETE_PATH]: {
+        undoable: true,
+        method: "completePath",
+    },
+    [CanvasCommandEnum.FILL]: { undoable: true, method: "fill" },
+    [CanvasCommandEnum.CLEAR]: { undoable: true, method: "clear" },
+    [CanvasCommandEnum.UNDO]: { ignore: true, method: "undo" },
+    [CanvasCommandEnum.REDO]: { ignore: true, method: "redo" },
+};
+
+export { ToolsEnum, BrushModeEnum, CanvasCommandEnum, CanvasCommandLookup };
