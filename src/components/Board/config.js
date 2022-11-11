@@ -11,17 +11,17 @@ const BrushModeEnum = Object.freeze({
 
 const CanvasCommandEnum = Object.freeze({
     // Overlapping
-    SET_COLOR: 0,
-    SET_STROKE: 1,
-    SET_BRUSH_MODE: 2,
+    SET_COLOR: "SET_COLOR",
+    SET_STROKE: "SET_STROKE",
+    SET_BRUSH_MODE: "SET_BRUSH_MODE",
     // Clubbing
-    DRAW_PATH: 3,
-    COMPLETE_PATH: 4,
-    FILL: 5,
-    CLEAR: 6,
+    DRAW_PATH: "DRAW_PATH",
+    COMPLETE_PATH: "COMPLETE_PATH",
+    FILL: "FILL",
+    CLEAR: "CLEAR",
     // Ignorable
-    UNDO: 7,
-    REDO: 8,
+    UNDO: "UNDO",
+    REDO: "REDO",
 });
 
 const CanvasCommandLookup = {

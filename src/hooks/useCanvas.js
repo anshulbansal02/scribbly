@@ -24,12 +24,12 @@ export default function useCanvas() {
         }
     }, [canvasRef]);
 
-    let canvasColor = "#000000";
-    let lastPoint = null;
+    let canvasColorRef = useRef("#000000");
+    let lastPointRef = useRef(null);
 
     // Canvas properties methods
     function setColor(color) {
-        canvasColor = color;
+        canvasColorRef.current = color;
         ctxRef.current.strokeStyle = color;
     }
 
@@ -44,7 +44,7 @@ export default function useCanvas() {
 
         if (mode === BrushModeEnum.PAINT) {
             ctx.globalCompositeOperation = "source-over";
-            ctx.strokeStyle = canvasColor;
+            ctx.strokeStyle = canvasColorRef.current;
         } else if (mode === BrushModeEnum.ERASE) {
             ctx.globalCompositeOperation = "destination-out";
             ctx.strokeStyle = "#000000";
@@ -55,16 +55,21 @@ export default function useCanvas() {
     function drawPath(point) {
         const ctx = ctxRef.current;
         // Use current point as last point if no last point
-        if (lastPoint === null) lastPoint = point;
+        if (lastPointRef.current === null) lastPointRef.current = point;
         // Render path
         ctx.beginPath();
-        ctx.quadraticCurveTo(lastPoint.x, lastPoint.y, point.x, point.y);
+        ctx.quadraticCurveTo(
+            lastPointRef.current.x,
+            lastPointRef.current.y,
+            point.x,
+            point.y
+        );
         ctx.stroke();
-        lastPoint = point;
+        lastPointRef.current = point;
     }
 
     function completePath() {
-        lastPoint = null;
+        lastPointRef.current = null;
     }
 
     function fill(point) {
@@ -78,7 +83,7 @@ export default function useCanvas() {
         );
 
         const initialColor = getPixelColor(point, imageData);
-        const finalColor = hexToRgba(canvasColor);
+        const finalColor = hexToRgba(canvasColorRef.current);
 
         const stack = [point];
         while (stack.length) {

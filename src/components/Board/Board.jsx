@@ -137,7 +137,7 @@ function Board() {
                     <div className="canvas-pointer" ref={pointerRef}></div>
                 </div>
             </div>
-            <Toolbox />
+            <Toolbox genericHandler={(action) => canvas[action]()} />
         </div>
     );
 }
