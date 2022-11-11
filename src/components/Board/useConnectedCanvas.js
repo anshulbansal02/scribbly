@@ -5,62 +5,85 @@ const { useCommandHistory } = require("hooks/useCommandHistory");
 const { useEffect, useState, useRef } = require("react");
 const { CanvasCommandEnum, CanvasCommandLookup } = require("./config");
 
+const CANVAS_MODE = Object.freeze({
+    VIEW_ONLY: 0,
+    DRAW: 1,
+});
+
 export default function useConnectedCanvas() {
     const [canvasRef, canvasMethods] = useCanvas();
     const socket = useSocket();
     const commandHistory = useCommandHistory();
 
-    const [shouldEmit, setShouldEmit] = useState(true);
+    const [canvasMode, setCanvasMode] = useState(CANVAS_MODE.DRAW);
 
     const eventQueue = useRef([]);
     const canvasQueue = useRef([]);
 
-    function processEventQueue() {
-        const [commandSeq, ...command] = eventQueue.current[0];
-        const expectedSeq = commandHistory.getExpectedSequence();
-        if (commandSeq !== expectedSeq) {
-            socket.emit(
-                IOEvents.CANVAS_HISTORY_QUERY,
-                { from: expectedSeq, to: commandSeq - 1 },
-                (commandHistory) => {
-                    // Add to command history
-                    commandHistory.batchAdd(commandHistory);
-                    const commands = commandHistory.getCompressedState();
-                    draw(commands);
-                }
-            );
+    useEffect(() => {
+        function processEventQueue() {
+            const [seq, ...command] = eventQueue.current[0];
+            const expectedSeq = commandHistory.getExpectedSequence();
+            if (seq !== expectedSeq) {
+                socket.emit(
+                    IOEvents.CANVAS_HISTORY_QUERY,
+                    { from: expectedSeq, to: seq - 1 },
+                    (commandHistory) => {
+                        // Add to command history
+                        commandHistory.batchAdd(commandHistory);
+                        const commands = commandHistory.getCompressedState();
+                        draw(commands);
+                    }
+                );
+            }
+            eventQueue.current.shift();
+            canvasQueue.current.push(command);
         }
-        eventQueue.current.shift();
-        canvasQueue.current.push(command);
-    }
 
-    function processCanvasQueue() {
-        const [commandSeq, ...command] = canvasQueue.shift();
-        // Get method for the command
-        // Call that method
-    }
+        function processCanvasQueue() {
+            const [seq, cmd, ...args] = canvasQueue.shift();
+            const canvasMethodName = CanvasCommandLookup[cmd].method;
+            decoratedCanvasMethods[canvasMethodName](...args);
+        }
+
+        let queueProcessingInterval;
+        if (canvasMode === CANVAS_MODE.VIEW_ONLY) {
+            clearInterval(queueProcessingInterval);
+            queueProcessingInterval = setInterval(() => {
+                processEventQueue();
+                processCanvasQueue();
+            }, 0);
+        }
+
+        return () => {
+            clearInterval(queueProcessingInterval);
+        };
+    }, [canvasMode]);
 
     useEffect(() => {
-        // const queueProcessingInterval = setInterval(() => {
-        //     processEventQueue();
-        //     processCanvasQueue();
-        // }, 0);
-
         socket.on(IOEvents.CANVAS, (command) => {
             eventQueue.push(command);
         });
 
         return () => {
-            // clearInterval(queueProcessingInterval);
             socket.off(IOEvents.CANVAS);
         };
     }, []);
+
+    const setMode = (mode) => {
+        setCanvasMode(mode);
+        eventQueue.current = [];
+        canvasQueue.current = [];
+        commandHistory.reset();
+        canvasMethods.clear();
+    };
 
     function decorator(command, func) {
         return (...args) => {
             const cache = func(...args);
             const entry = commandHistory.add(command, ...args);
-            if (shouldEmit) socket.emit(IOEvents.CANVAS, entry);
+            if (canvasMode === CANVAS_MODE.VIEW_ONLY)
+                socket.emit(IOEvents.CANVAS, entry);
         };
     }
 
@@ -84,7 +107,7 @@ export default function useConnectedCanvas() {
         draw(redoCommands);
     }
 
-    const methods = {
+    const decoratedCanvasMethods = {
         setColor: decorator(
             CanvasCommandEnum.SET_COLOR,
             canvasMethods.setColor
@@ -109,6 +132,7 @@ export default function useConnectedCanvas() {
         clear: decorator(CanvasCommandEnum.CLEAR, canvasMethods.clear),
         undo: decorator(CanvasCommandEnum.UNDO, undo),
         redo: decorator(CanvasCommandEnum.REDO, redo),
+        setMode,
     };
-    return [canvasRef, methods];
+    return [canvasRef, decoratedCanvasMethods];
 }

@@ -99,11 +99,19 @@ const useCommandHistory = () => {
         return sequenceRef.current;
     };
 
+    const reset = () => {
+        historyStack.current = [];
+        sequenceRef.current = 0;
+        undoStack.current = [];
+        redoStack.current = [];
+    };
+
     return {
         add,
         batchAdd,
         undo,
         redo,
+        reset,
         getCompressedState,
         getExpectedSequence,
     };
