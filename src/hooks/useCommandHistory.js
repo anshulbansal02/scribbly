@@ -10,6 +10,10 @@ const useCommandHistory = () => {
     const undoStack = useRef([]);
     const redoStack = useRef([]);
 
+    const last = (stack) => {
+        return stack.current.length ? stack.current.at(-1) : null;
+    };
+
     const makeEntry = (cmd, data) => {
         // [SequenceNo, COMMAND, ...arguments]
         const entry = [sequenceRef.current, cmd, ...data];
@@ -44,24 +48,19 @@ const useCommandHistory = () => {
 
     // Returns the last command undoed
     const undo = () => {
-        let lastCmd = undoStack.current.at(-1);
-        while (
-            undoStack.current.length &&
-            !CanvasCommandLookup[lastCmd[1]].undoable
-        ) {
+        if (!undoStack.current.length) return;
+
+        do {
             redoStack.current.push(undoStack.current.pop());
-            lastCmd = undoStack.current.at(-1);
-        }
+        } while (
+            undoStack.current.length &&
+            !CanvasCommandLookup[last(redoStack)[1]].undoable
+        );
 
-        if (!undoStack.current.length) {
-            return;
-        }
-
-        redoStack.current.push(undoStack.current.pop());
-        if (redoStack.current.at(-1)[1] === CanvasCommandEnum.COMPLETE_PATH) {
+        if (last(redoStack)[1] === CanvasCommandEnum.COMPLETE_PATH) {
             while (
                 undoStack.current.length &&
-                undoStack.current.at(-1)[1] === CanvasCommandEnum.DRAW_PATH
+                last(undoStack)[1] === CanvasCommandEnum.DRAW_PATH
             ) {
                 redoStack.current.push(undoStack.current.pop());
             }
@@ -69,7 +68,30 @@ const useCommandHistory = () => {
     };
 
     // Returns the last command redoed
-    const redo = () => {};
+    const redo = () => {
+        if (!redoStack.current.length) return [];
+
+        const executableCommands = [];
+
+        do {
+            const lastCmd = redoStack.current.pop();
+            undoStack.current.push(lastCmd);
+            executableCommands.push(lastCmd);
+        } while (
+            redoStack.current.length &&
+            !CanvasCommandLookup[last(undoStack)[1]].undoable
+        );
+
+        if (last(undoStack)[1] === CanvasCommandEnum.DRAW_PATH) {
+            do {
+                const lastCmd = redoStack.current.pop();
+                undoStack.current.push(lastCmd);
+                executableCommands.push(lastCmd);
+            } while (last(undoStack)[1] !== CanvasCommandEnum.COMPLETE_PATH);
+        }
+
+        return executableCommands;
+    };
 
     const getCompressedState = () => {
         // Returns the current state
