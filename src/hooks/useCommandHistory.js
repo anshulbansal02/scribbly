@@ -46,7 +46,6 @@ const useCommandHistory = () => {
         }
     };
 
-    // Returns the last command undoed
     const undo = () => {
         if (!undoStack.current.length) return;
 
@@ -67,7 +66,6 @@ const useCommandHistory = () => {
         }
     };
 
-    // Returns the last command redoed
     const redo = () => {
         if (!redoStack.current.length) return [];
 
@@ -94,7 +92,7 @@ const useCommandHistory = () => {
     };
 
     const getCompressedState = () => {
-        // Returns the current state
+        return undoStack.current;
     };
 
     const getExpectedSequence = () => {

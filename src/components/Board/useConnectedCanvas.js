@@ -3,7 +3,7 @@ import { useCanvas } from "hooks";
 const { useSocket } = require("contexts/SocketContext");
 const { useCommandHistory } = require("hooks/useCommandHistory");
 const { useEffect, useState, useRef } = require("react");
-const { CanvasCommandEnum } = require("./config");
+const { CanvasCommandEnum, CanvasCommandLookup } = require("./config");
 
 export default function useConnectedCanvas() {
     const [canvasRef, canvasMethods] = useCanvas();
@@ -59,18 +59,30 @@ export default function useConnectedCanvas() {
     function decorator(command, func) {
         return (...args) => {
             const cache = func(...args);
-            const entry = commandHistory.add(command, ...args, cache);
+            const entry = commandHistory.add(command, ...args);
             if (shouldEmit) socket.emit(IOEvents.CANVAS, entry);
         };
     }
 
-    function draw(commands) {}
-
-    function undo() {
-        console.log(commandHistory.undo());
+    function draw(commands) {
+        for (const command of commands) {
+            const [seq, cmd, ...args] = command;
+            const canvasMethodName = CanvasCommandLookup[cmd].method;
+            canvasMethods[canvasMethodName](...args);
+        }
     }
 
-    function redo() {}
+    function undo() {
+        commandHistory.undo();
+        const redrawCommands = commandHistory.getCompressedState();
+        canvasMethods.clear();
+        draw(redrawCommands);
+    }
+
+    function redo() {
+        const redoCommands = commandHistory.redo();
+        draw(redoCommands);
+    }
 
     const methods = {
         setColor: decorator(
