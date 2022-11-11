@@ -85,7 +85,7 @@ export default function useCanvas() {
         const initialColor = getPixelColor(point, imageData);
         const finalColor = hexToRgba(canvasColorRef.current);
 
-        const stack = [point];
+        const stack = [{ ...point }];
         while (stack.length) {
             const pixel = stack.pop();
 

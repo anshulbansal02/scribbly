@@ -92,7 +92,7 @@ const useCommandHistory = () => {
     };
 
     const getCompressedState = () => {
-        return undoStack.current;
+        return undoStack.current.slice();
     };
 
     const getExpectedSequence = () => {
