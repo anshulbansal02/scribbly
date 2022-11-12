@@ -19,7 +19,7 @@ export default function RoomPlayers() {
                 {playersInRoom.map(({ id: playerId, username }) => (
                     <Avatar
                         key={playerId}
-                        id={playerId}
+                        playerId={playerId}
                         withUsername
                         size={56}
                     />

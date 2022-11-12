@@ -6,18 +6,17 @@ import { getImageAccent } from "utils";
 import { usePlayer } from "shared/hooks";
 
 const Avatar = ({ playerId, size = 48, withUsername }) => {
-    const [accent, setAccent] = useState("#f0f0f0");
+    const AVATAR_SVG = `https://avatars.dicebear.com/api/bottts/${playerId}.svg`;
 
+    const [accent, setAccent] = useState("#f0f0f0");
     const player = usePlayer(playerId);
 
     useEffect(() => {
         (async () => {
-            const color = await getImageAccent(
-                `https://avatars.dicebear.com/api/bottts/${id}.svg`
-            );
+            const color = await getImageAccent(AVATAR_SVG);
             setAccent(color);
         })();
-    }, [id]);
+    }, [playerId]);
 
     return (
         <div className="avatar">
@@ -33,7 +32,7 @@ const Avatar = ({ playerId, size = 48, withUsername }) => {
                 <img
                     className="avatar-img"
                     draggable="false"
-                    src={`https://avatars.dicebear.com/api/bottts/${id}.svg`}
+                    src={AVATAR_SVG}
                     alt={player.username}
                 />
             </div>
