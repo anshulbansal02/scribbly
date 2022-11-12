@@ -49,6 +49,55 @@ function setPixelColor(point, color, imageData) {
     return index;
 }
 
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+const accentCache = new Map();
+async function getImageAccent(src) {
+    if (accentCache.has(src)) return accentCache.get(src);
+
+    const size = 50;
+    const canvas = new OffscreenCanvas(size, size);
+    const ctx = canvas.getContext("2d");
+
+    const img = await loadImage(src);
+
+    ctx.drawImage(img, 0, 0);
+    const { data } = ctx.getImageData(0, 0, size, size);
+
+    const sums = [0, 0, 0];
+    for (let i = 0; i < data.length; i += 4) {
+        sums[0] += data[i];
+        sums[1] += data[i + 1];
+        sums[2] += data[i + 2];
+    }
+    for (let i = 0; i < 3; i++) {
+        sums[i] = Math.round(sums[i] / (size * size));
+    }
+
+    const accent = rgbToHex(sums[0], sums[1], sums[2]);
+    accentCache.set(src, accent);
+    return accent;
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return (
+        "#" + componentToHex(r) + componentToHex(g) + componentToHex(b) + "ff"
+    );
+}
+
 export {
     getEventCoords,
     getNormalizedCoords,
@@ -57,4 +106,5 @@ export {
     getPixelColor,
     setPixelColor,
     coordsToIndex,
+    getImageAccent,
 };

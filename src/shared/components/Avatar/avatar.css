@@ -2,29 +2,16 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    justify-content: center;
     gap: 8px;
 }
 
 .avatar-img-container {
-    width: 60px;
-    height: 60px;
-    position: relative;
     display: grid;
     place-items: center;
-
-    border-radius: 30px;
     overflow: hidden;
-    background-color: #fff;
-}
-
-.avatar-bg {
-    position: absolute;
-    filter: blur(30px);
 }
 
 .avatar-img {
-    position: relative;
     width: 70%;
     height: 70%;
 }
