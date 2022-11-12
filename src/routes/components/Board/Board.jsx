@@ -13,6 +13,7 @@ import { BrushModeEnum, ToolsEnum } from "store/constants/canvas";
 import { useConnectedCanvas } from "shared/hooks";
 
 import { Toolbox } from "routes/components";
+import { Timer, WordBoard } from "shared/components";
 
 function Board() {
     const [canvasRef, canvas] = useConnectedCanvas();
@@ -136,6 +137,14 @@ function Board() {
                 >
                     <canvas ref={canvasRef} />
                     <div className="canvas-pointer" ref={pointerRef}></div>
+
+                    <div className="board-overlay">
+                        <div className="word-drawer">
+                            <p className="drawer">knavihs is drawing</p>
+                            <WordBoard word={"*a**-*"} />
+                        </div>
+                        <Timer maxTime={120} timeLeft={24} />
+                    </div>
                 </div>
             </div>
             <Toolbox genericHandler={(action) => canvas[action]()} />

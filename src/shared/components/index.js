@@ -7,3 +7,5 @@ export { default as Selector } from "./Selector/Selector";
 export { default as TextAction } from "./TextAction/TextAction";
 export { default as Toast } from "./Toast/Toast";
 export { default as ToastContainer } from "./ToastContainer/ToastContainer";
+export { default as Timer } from "./Timer/Timer";
+export { default as WordBoard } from "./WordBoard/WordBoard";
