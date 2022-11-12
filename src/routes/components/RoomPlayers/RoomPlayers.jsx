@@ -17,7 +17,12 @@ export default function RoomPlayers() {
             </h4>
             <div className="players-list">
                 {playersInRoom.map(({ id: playerId, username }) => (
-                    <Avatar key={playerId} id={playerId} label={username} />
+                    <Avatar
+                        key={playerId}
+                        id={playerId}
+                        withUsername
+                        size={56}
+                    />
                 ))}
             </div>
         </div>

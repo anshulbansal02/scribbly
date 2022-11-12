@@ -3,9 +3,12 @@ import "./avatar.css";
 import { useEffect, useState } from "react";
 
 import { getImageAccent } from "utils";
+import { usePlayer } from "shared/hooks";
 
-const Avatar = ({ id, size = 48, label }) => {
+const Avatar = ({ playerId, size = 48, withUsername }) => {
     const [accent, setAccent] = useState("#f0f0f0");
+
+    const player = usePlayer(playerId);
 
     useEffect(() => {
         (async () => {
@@ -14,7 +17,7 @@ const Avatar = ({ id, size = 48, label }) => {
             );
             setAccent(color);
         })();
-    });
+    }, [id]);
 
     return (
         <div className="avatar">
@@ -31,10 +34,14 @@ const Avatar = ({ id, size = 48, label }) => {
                     className="avatar-img"
                     draggable="false"
                     src={`https://avatars.dicebear.com/api/bottts/${id}.svg`}
-                    alt={label}
+                    alt={player.username}
                 />
             </div>
-            {label && <p className="avatar-label">{label}</p>}
+            {withUsername && (
+                <p className="avatar-label">
+                    {player ? player.username : "Unnamed"}
+                </p>
+            )}
         </div>
     );
 };

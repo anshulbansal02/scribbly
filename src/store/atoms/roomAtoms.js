@@ -30,6 +30,17 @@ const roomJoinURLAtom = atom(
     (get) => `${window.location.host}/join/${get(roomIdAtom)}`
 );
 
+const playersAtom = atom((get) => {
+    const players = get(roomPlayersAtom);
+    const users = {};
+    players.forEach((player) => {
+        users[player.id] = {
+            ...player,
+        };
+    });
+    return users;
+});
+
 // Action Atoms
 const resetRoomAtom = atom(null, (get, set, update) => {
     set(roomIdAtom, null);
@@ -44,6 +55,7 @@ export {
     roomIdAtom,
     roomAdminIdAtom,
     roomPlayersAtom,
+    playersAtom,
     gameSettingsAtom,
     roomJoinURLAtom,
     resetRoomAtom,
