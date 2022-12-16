@@ -1,62 +1,70 @@
 import { atom } from "jotai";
 
-import { playerUsernameAtom } from "./playerAtoms";
+const roomAtoms = {
+    // Atoms
+    id: atom(null),
+    adminId: atom(null),
+    players: atom({}),
+    playerIdsInRoom: atom([]),
+    settings: atom({}),
 
-// Atoms
-const roomIdAtom = atom(null);
-const roomAdminIdAtom = atom(null);
-const roomPlayersAtom = atom([]);
+    // Molecules
+    room: atom(
+        (get) => ({
+            id: get(roomAtoms.id),
+            adminId: get(roomAtoms.adminId),
+            playerIds: get(roomAtoms.playerIdsInRoom),
+            settings: get(roomAtoms.settings),
+        }),
+        (get, set, roomDto) => {
+            const { id, adminId, playerIds, settings } = roomDto;
+            set(roomAtoms.id, id);
+            set(roomAtoms.adminId, adminId);
+            set(roomAtoms.settings, settings);
+            set(roomAtoms.playerIdsInRoom, playerIds);
+        }
+    ),
 
-const gameSettingsAtom = atom({});
-
-// Molecules (Derived Atoms)
-const roomAtom = atom(
-    (get) => ({
-        id: get(roomIdAtom),
-        adminId: get(roomAdminIdAtom),
-        players: get(roomPlayersAtom),
-        settings: get(gameSettingsAtom),
+    // Derived & Actions
+    addPlayerIdToRoom: atom(null, (get, set, playerId) => {
+        set(roomAtoms.playerIdsInRoom, [
+            ...get(roomAtoms.playerIdsInRoom),
+            playerId,
+        ]);
     }),
-    (get, set, roomData) => {
-        const { id, adminId, players, settings } = roomData;
-        set(roomIdAtom, id);
-        set(roomAdminIdAtom, adminId);
-        set(roomPlayersAtom, players);
-        set(gameSettingsAtom, settings);
-    }
-);
+    removePlayerIdFromRoom: atom(null, (get, set, playerId) => {
+        set(
+            roomAtoms.playerIdsInRoom,
+            get(roomAtoms.playerIdsInRoom).filter(
+                (playerIdInRoom) => playerIdInRoom !== playerId
+            )
+        );
+    }),
 
-const roomJoinURLAtom = atom(
-    (get) => `${window.location.host}/join/${get(roomIdAtom)}`
-);
+    addPlayerData: atom(null, (get, set, playerDto) => {
+        const { id, username, avatar } = playerDto;
 
-const playersAtom = atom((get) => {
-    const players = get(roomPlayersAtom);
-    const users = {};
-    players.forEach((player) => {
-        users[player.id] = {
-            ...player,
-        };
-    });
-    return users;
-});
+        set(roomAtoms.players, {
+            ...get(roomAtoms.players),
+            id: {
+                id,
+                username,
+                avatar: avatar.imageURL,
+                accent: avatar.accentColor,
+            },
+        });
+    }),
+
+    joinURL: atom((get) => `${window.location.host}/join/${get(roomAtoms.id)}`),
+
+    reset: atom(null, (get, set, _) => {
+        set(roomAtoms.id, null);
+        set(roomAtoms.adminId, null);
+        set(roomAtoms.players, []);
+        set(roomAtoms.settings, {});
+    }),
+};
 
 // Action Atoms
-const resetRoomAtom = atom(null, (get, set, update) => {
-    set(roomIdAtom, null);
-    set(roomAdminIdAtom, null);
-    set(roomPlayersAtom, []);
-    set(playerUsernameAtom, null);
-    set(gameSettingsAtom, {});
-});
 
-export {
-    roomAtom,
-    roomIdAtom,
-    roomAdminIdAtom,
-    roomPlayersAtom,
-    playersAtom,
-    gameSettingsAtom,
-    roomJoinURLAtom,
-    resetRoomAtom,
-};
+export default roomAtoms;

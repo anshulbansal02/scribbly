@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { roomIdAtom, roomPlayersAtom } from "store/atoms/roomAtoms";
+import roomAtoms from "store/atoms/roomAtoms";
 import { useSocket } from "shared/hooks";
 import IOEvents from "store/constants/IOEvents.js";
 
@@ -11,8 +11,7 @@ import { LobbyView } from "routes/views";
 import "./room.css";
 
 export default function Room() {
-    const roomId = useAtomValue(roomIdAtom);
-    const setPlayersInRoom = useSetAtom(roomPlayersAtom);
+    const roomId = useAtomValue(roomAtoms.id);
 
     const socket = useSocket();
     const navigate = useNavigate();
@@ -24,15 +23,9 @@ export default function Room() {
     }, [roomId]);
 
     useEffect(() => {
-        socket.on(IOEvents.ROOM_PLAYER_JOIN, ({ player }) => {
-            setPlayersInRoom((players) => [...players, player]);
-        });
+        socket.on(IOEvents.ROOM_PLAYER_JOIN, ({ player }) => {});
 
-        socket.on(IOEvents.ROOM_PLAYER_LEAVE, ({ player }) => {
-            setPlayersInRoom((players) =>
-                players.filter((playerInRoom) => player.id !== playerInRoom.id)
-            );
-        });
+        socket.on(IOEvents.ROOM_PLAYER_LEAVE, ({ player }) => {});
 
         return () => {
             socket.off(IOEvents.ROOM_PLAYER_JOIN);

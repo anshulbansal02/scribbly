@@ -1,23 +1,19 @@
 import "./lobby.css";
 
 import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useSocket, useToggle } from "shared/hooks";
 import IOEvents from "store/constants/IOEvents";
-import {
-    gameSettingsAtom,
-    resetRoomAtom,
-    roomJoinURLAtom,
-} from "store/atoms/roomAtoms.js";
+import roomAtoms from "store/atoms/roomAtoms.js";
 
 import { Page, TextAction, Button, Modal } from "shared/components";
 import { GameSettings, RoomPlayers } from "routes/components";
 
 export default function Lobby() {
-    const roomJoinURL = useAtomValue(roomJoinURLAtom);
-    const setGameSettings = useSetAtom(gameSettingsAtom);
-    const resetRoom = useSetAtom(resetRoomAtom);
+    const roomJoinURL = useAtomValue(roomAtoms.roomJoinURL);
+    const [gs, setGameSettings] = useState(); // useAtom
+    const resetRoom = useSetAtom(roomAtoms.reset);
 
     const [exitRoomModal, toggleExitRoomModal] = useToggle();
 

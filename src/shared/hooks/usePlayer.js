@@ -1,14 +1,43 @@
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { selectAtom } from "jotai/utils";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { playersAtom } from "store/atoms/roomAtoms";
+import useApi from "api";
+
+import roomAtoms from "store/atoms/roomAtoms";
 
 export default function usePlayer(playerId) {
-    return useAtomValue(
+    const [player, setPlayer] = useState(null);
+    const addPlayerData = useSetAtom(roomAtoms.addPlayerData);
+    const cachedPlayerData = useAtomValue(
         selectAtom(
-            playersAtom,
-            useCallback((players) => players[playerId], [])
+            roomAtoms.players,
+            useCallback((players) => players[playerId], [playerId])
         )
+    );
+    const api = useApi();
+
+    if (cachedPlayerData) {
+        setPlayer(cachedPlayerData);
+    }
+
+    useEffect(() => {
+        async function fetchPlayer() {
+            if (!player) {
+                const playerDto = await api.getPlayer(playerId);
+                addPlayerData(playerDto);
+            }
+        }
+
+        fetchPlayer();
+    });
+
+    return (
+        player ?? {
+            id: playerId,
+            username: "",
+            avatar: "",
+            accent: "",
+        }
     );
 }

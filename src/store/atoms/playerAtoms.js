@@ -1,17 +1,40 @@
 import { atom } from "jotai";
 
 // Atoms
-const playerIdAtom = atom(null);
-const playerUsernameAtom = atom(null);
 
-// Molecules
-const playerAtom = atom(
-    (get) => ({ id: get(playerIdAtom), username: get(playerUsernameAtom) }),
-    (get, set, playerData) => {
-        const { id, username } = playerData;
-        if (id !== null) set(playerIdAtom, id);
-        if (username !== null) set(playerUsernameAtom, username);
-    }
-);
+const playerAtoms = {
+    id: atom(null),
+    username: atom(null),
+    avatar: atom(null),
+    accent: atom(null),
 
-export { playerAtom, playerIdAtom, playerUsernameAtom };
+    player: atom(
+        (get) => {
+            return {
+                id: get(playerAtoms.id),
+                username: get(playerAtoms.username),
+                avatar: get(playerAtoms.avatar),
+                accent: get(playerAtoms.accent),
+            };
+        },
+        (get, set, playerDto) => {
+            const { id, username, avatar } = playerDto;
+
+            if (id !== null) set(playerAtoms.id, id);
+            if (username !== null) set(playerAtoms.username, username);
+            if (avatar.imageURI !== null)
+                set(playerAtoms.avatar, avatar.imageURI);
+            if (avatar.accentColor !== null)
+                set(playerAtoms.accent, avatar.accentColor);
+        }
+    ),
+
+    reset: atom(null, (get, set, update) => {
+        set(playerAtoms.id, null);
+        set(playerAtoms.username, null);
+        set(playerAtoms.avatar, null);
+        set(playerAtoms.accent, null);
+    }),
+};
+
+export default playerAtoms;

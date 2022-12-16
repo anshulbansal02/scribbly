@@ -1,11 +1,11 @@
 import { useAtomValue } from "jotai";
 
-import { playerIdAtom } from "store/atoms/playerAtoms";
-import { roomAdminIdAtom } from "store/atoms/roomAtoms";
+import playerAtoms from "store/atoms/playerAtoms";
+import roomAtoms from "store/atoms/roomAtoms";
 
 export default function useIsAdmin() {
-    const playerId = useAtomValue(playerIdAtom);
-    const adminId = useAtomValue(roomAdminIdAtom);
+    const playerId = useAtomValue(playerAtoms.id);
+    const adminId = useAtomValue(roomAtoms.adminId);
 
-    return roomAdminIdAtom && playerId === adminId;
+    return playerId === adminId;
 }

@@ -3,13 +3,13 @@ import "./gameSettings.css";
 import { useAtom } from "jotai";
 
 import { gameSettingsOptions } from "store/config";
-import { gameSettingsAtom } from "store/atoms/roomAtoms";
 import { useIsAdmin } from "shared/hooks";
 
 import { Selector } from "shared/components";
+import { useState } from "react";
 
 export default function GameSettings({ onChange }) {
-    const [gameSettings, setGameSettings] = useAtom(gameSettingsAtom);
+    const [gameSettings, setGameSettings] = useState(); // UseAtom
     const isAdmin = useIsAdmin();
 
     const handleSettingsChange = (selected) => {

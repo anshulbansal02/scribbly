@@ -1,16 +1,18 @@
 import "./home.css";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 
 import { useInput, useToggle, useSocket } from "shared/hooks";
 
-import { playerUsernameAtom } from "store/atoms/playerAtoms";
-import { roomAtom } from "store/atoms/roomAtoms";
+import playerAtoms from "store/atoms/playerAtoms";
+import authAtoms from "store/atoms/authAtoms";
+import roomAtoms from "store/atoms/roomAtoms";
 import IOEvents from "store/constants/IOEvents";
 
 import { Modal, Page, Button, Input } from "shared/components";
+import useApi from "api";
 
 export default function Home() {
     // UI State
@@ -20,40 +22,33 @@ export default function Home() {
     const [roomCodeInputError, setRoomCodeInputError] = useState("");
     const [roomCodeModalOpen, toggleRoomCodeModal] = useToggle();
 
+    const api = useApi();
     const socket = useSocket();
-    const navigate = useNavigate();
 
-    // Atoms State
-    const setRoom = useSetAtom(roomAtom);
-    const setPlayerUsername = useSetAtom(playerUsernameAtom);
-
-    useEffect(() => {
-        socket.on(IOEvents.ROOM_JOIN, ({ room }) => {
-            setPlayerUsername(usernameInput.value);
-            setRoom(room);
-
-            navigate("/game");
-        });
-
-        return () => {
-            socket.off(IOEvents.ROOM_JOIN);
-        };
-    }, [socket]);
+    // Atoms
+    const setRoom = useSetAtom(roomAtoms.room);
+    const setPlayer = useSetAtom(playerAtoms.player);
+    const setAssociationToken = useSetAtom(authAtoms.associationToken);
 
     // Handlers
     const handlePlayNow = () => {
         // Implementation Deferred
     };
 
-    const handleNewRoom = () => {
+    const handleNewRoom = async () => {
         const { value: username } = usernameInput;
         if (!username) {
             setUsernameInputError("Please enter a valid username.");
             setTimeout(() => setUsernameInputError(""), 1500);
             return;
         }
-        // Request room creation
-        socket.emit(IOEvents.ROOM_CREATE, { username });
+
+        const { player, token } = await api.createPlayer(username);
+        setPlayer(player);
+        setAssociationToken(token);
+
+        const room = await api.createRoom();
+        setRoom(room);
     };
 
     const handleJoinRoomModal = () => {

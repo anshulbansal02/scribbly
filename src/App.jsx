@@ -6,15 +6,14 @@ import { useSetAtom } from "jotai";
 
 import { router } from "routes";
 import { useSocket, useToaster } from "shared/hooks";
-import { playerIdAtom } from "store/atoms/playerAtoms";
-import IOEvents from "store/constants/IOEvents";
+import authAtoms from "store/atoms/authAtoms";
 
 import { ToastContainer } from "shared/components";
 
 export default function App() {
     const errorToast = useRef(null);
 
-    const setPlayerId = useSetAtom(playerIdAtom);
+    const setClientId = useSetAtom(authAtoms.clientId);
 
     const socket = useSocket();
     const toaster = useToaster();
@@ -46,14 +45,19 @@ export default function App() {
             }
         });
 
-        socket.on(IOEvents.PLAYER_CREATE, ({ player }) => {
-            setPlayerId(player.id);
+        socket.on("client-id", (clientId) => {
+            setClientId(clientId);
+        });
+
+        socket.on("disconnect", () => {
+            setClientId(null);
         });
 
         return () => {
             socket.off("connect");
+            socket.off("disconnect");
+            socket.off("client_id");
             socket.off("connect_error");
-            socket.off(IOEvents.PLAYER_CREATE);
         };
     }, [socket]);
 

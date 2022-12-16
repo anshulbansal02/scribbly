@@ -6,8 +6,8 @@ import { useSetAtom } from "jotai";
 import axios from "axios";
 
 import { useSocket, useInput } from "shared/hooks";
-import { roomAtom } from "store/atoms/roomAtoms";
-import { playerUsernameAtom } from "store/atoms/playerAtoms";
+import roomAtoms from "store/atoms/roomAtoms";
+import playerAtoms from "store/atoms/playerAtoms";
 import IOEvents from "store/constants/IOEvents";
 
 import { Button, Input, Page } from "shared/components";
@@ -19,8 +19,8 @@ export default function Join() {
     const usernameInput = useInput();
 
     const [roomExists, setRoomExists] = useState(null);
-    const setRoom = useSetAtom(roomAtom);
-    const setPlayerUsername = useSetAtom(playerUsernameAtom);
+    const setRoom = useSetAtom(roomAtoms.room);
+    const setPlayerUsername = useSetAtom(playerAtoms.username);
 
     const navigate = useNavigate();
     const socket = useSocket();

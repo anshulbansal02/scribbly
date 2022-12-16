@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useSetAtom } from "jotai";
 import { nanoid } from "nanoid";
 
@@ -14,24 +15,27 @@ export default function useToaster() {
     const pushToast = useSetAtom(pushToastAtom);
     const popToast = useSetAtom(popToastAtom);
 
-    function make(defaultConfig) {
-        return (config) => {
-            if (typeof config !== "object") {
-                config = { title: config };
-            }
-            const newToast = { ...defaultConfig, ...config, id: toastId() };
+    const make = useCallback(
+        (defaultConfig) => {
+            return (config) => {
+                if (typeof config !== "object") {
+                    config = { title: config };
+                }
+                const newToast = { ...defaultConfig, ...config, id: toastId() };
 
-            pushToast(newToast);
+                pushToast(newToast);
 
-            if (!config.persistant) {
-                setTimeout(() => {
-                    popToast(newToast.id);
-                }, config.timeout ?? DEFAULT_TIMEOUT);
-            }
+                if (!config.persistant) {
+                    setTimeout(() => {
+                        popToast(newToast.id);
+                    }, config.timeout ?? DEFAULT_TIMEOUT);
+                }
 
-            return newToast.id;
-        };
-    }
+                return newToast.id;
+            };
+        },
+        [pushToast, popToast]
+    );
 
     const toasterMethods = {
         toast: make({}),

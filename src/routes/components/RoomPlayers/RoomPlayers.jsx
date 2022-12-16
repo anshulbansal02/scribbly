@@ -2,21 +2,21 @@ import "./roomPlayers.css";
 
 import { useAtomValue } from "jotai";
 
-import { roomPlayersAtom } from "store/atoms/roomAtoms";
+import roomAtoms from "store/atoms/roomAtoms";
 
 import { Avatar } from "shared/components";
 
 export default function RoomPlayers() {
-    const playersInRoom = useAtomValue(roomPlayersAtom);
+    const playerIdsInRoom = useAtomValue(roomAtoms.playerIdsInRoom);
 
     return (
         <div className="room-players">
             <h4>
-                {playersInRoom.length}{" "}
-                {playersInRoom.length > 1 ? "Players" : "Player"} In The Room
+                {playerIdsInRoom.length}{" "}
+                {playerIdsInRoom.length > 1 ? "Players" : "Player"} In The Room
             </h4>
             <div className="players-list">
-                {playersInRoom.map(({ id: playerId, username }) => (
+                {playerIdsInRoom.map((playerId) => (
                     <Avatar
                         key={playerId}
                         playerId={playerId}

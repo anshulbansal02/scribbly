@@ -36,11 +36,7 @@ const Avatar = ({ playerId, size = 48, withUsername }) => {
                     alt={player.username}
                 />
             </div>
-            {withUsername && (
-                <p className="avatar-label">
-                    {player ? player.username : "Unnamed"}
-                </p>
-            )}
+            {withUsername && <p className="avatar-label">{player.username}</p>}
         </div>
     );
 };
