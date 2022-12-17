@@ -1,34 +1,39 @@
 import "./home.css";
 
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
-import { useAtom, useSetAtom } from "jotai";
+import { useState } from "react";
+import { useSetAtom } from "jotai";
 
 import { useInput, useToggle, useSocket } from "shared/hooks";
 
 import playerAtoms from "store/atoms/playerAtoms";
 import authAtoms from "store/atoms/authAtoms";
 import roomAtoms from "store/atoms/roomAtoms";
-import IOEvents from "store/constants/IOEvents";
 
-import { Modal, Page, Button, Input } from "shared/components";
+import { Page, Button, Input } from "shared/components";
 import useApi from "api";
+import RoomCodeModal from "./RoomCodeModal";
 
 export default function Home() {
     // UI State
-    const usernameInput = useInput();
+    const usernameInput = useInput({
+        changeHook: () => setUsernameInputError(""),
+    });
     const [usernameInputError, setUsernameInputError] = useState("");
-    const roomCodeInput = useInput();
-    const [roomCodeInputError, setRoomCodeInputError] = useState("");
     const [roomCodeModalOpen, toggleRoomCodeModal] = useToggle();
-
-    const api = useApi();
-    const socket = useSocket();
 
     // Atoms
     const setRoom = useSetAtom(roomAtoms.room);
     const setPlayer = useSetAtom(playerAtoms.player);
     const setAssociationToken = useSetAtom(authAtoms.associationToken);
+
+    const api = useApi();
+    const socket = useSocket();
+
+    function validateUsernameInput() {
+        if (usernameInput.value) return true;
+        setUsernameInputError("Please enter a valid username.");
+        return false;
+    }
 
     // Handlers
     const handlePlayNow = () => {
@@ -36,43 +41,20 @@ export default function Home() {
     };
 
     const handleNewRoom = async () => {
-        const { value: username } = usernameInput;
-        if (!username) {
-            setUsernameInputError("Please enter a valid username.");
-            setTimeout(() => setUsernameInputError(""), 1500);
-            return;
+        if (validateUsernameInput()) {
+            const { player, token } = await api.createPlayer(
+                usernameInput.value
+            );
+            setPlayer(player);
+            setAssociationToken(token);
+
+            const room = await api.createRoom();
+            setRoom(room);
         }
-
-        const { player, token } = await api.createPlayer(username);
-        setPlayer(player);
-        setAssociationToken(token);
-
-        const room = await api.createRoom();
-        setRoom(room);
     };
 
-    const handleJoinRoomModal = () => {
-        if (!usernameInput.value) {
-            setUsernameInputError("Please enter a valid username.");
-            setTimeout(() => setUsernameInputError(""), 1500);
-            return;
-        }
-        toggleRoomCodeModal();
-    };
-
-    const handleRoomJoin = () => {
-        const { value: roomId } = roomCodeInput;
-        const { value: username } = usernameInput;
-        if (!/[a-z]{6}/.test(roomId)) {
-            setRoomCodeInputError("Please enter a valid room code.");
-            setTimeout(() => setRoomCodeInputError(""), 1500);
-            return;
-        }
-        // Request room join
-        socket.emit(IOEvents.ROOM_JOIN, {
-            roomId,
-            username,
-        });
+    const handleJoinRoom = () => {
+        validateUsernameInput() && toggleRoomCodeModal();
     };
 
     return (
@@ -96,28 +78,14 @@ export default function Home() {
                     Play Now
                 </Button>
                 <Button onClick={handleNewRoom}>New Room</Button>
-                <Button onClick={handleJoinRoomModal}>Join Room</Button>
+                <Button onClick={handleJoinRoom}>Join Room</Button>
             </div>
 
-            <Modal
+            <RoomCodeModal
                 isOpen={roomCodeModalOpen}
-                onOutsideClick={toggleRoomCodeModal}
-                className="room-code-modal"
-            >
-                <h4>Hello {usernameInput.value}, What's your room code?</h4>
-                <Input
-                    type="text"
-                    placeholder="Room Code"
-                    spellCheck="false"
-                    error={roomCodeInputError}
-                    {...roomCodeInput}
-                    autoFocus
-                />
-                <Button onClick={handleRoomJoin} className="green">
-                    Lessgo
-                </Button>
-                <Button onClick={toggleRoomCodeModal}>Cancel</Button>
-            </Modal>
+                onClose={toggleRoomCodeModal}
+                username={usernameInput.value}
+            />
         </Page>
     );
 }

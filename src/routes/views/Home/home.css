@@ -51,16 +51,25 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     width: 420px;
-    padding: 16px 24px;
+    padding: 24px;
 }
 
-.room-code-modal h4,
+.room-code-modal .modal-text,
 .room-code-modal .input-container {
     grid-column: span 2;
 }
 
-.room-code-modal h4 {
-    text-align: center;
-    font-size: 1.8rem;
+.modal-text {
     margin-bottom: 16px;
+    text-align: center;
+}
+
+.modal-text h3 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.modal-text p {
+    font-size: 2rem;
+    font-weight: 500;
 }

@@ -1,9 +1,8 @@
-import { forwardRef } from "react";
 import "./input.css";
 
 import { ReactComponent as ErrorIcon } from "./static/error.svg";
 
-const Input = forwardRef(({ className, error, ...props }, ref) => {
+const Input = ({ className, error, ...props }) => {
     return (
         <div className="input-container">
             <input
@@ -17,6 +16,6 @@ const Input = forwardRef(({ className, error, ...props }, ref) => {
             )}
         </div>
     );
-});
+};
 
 export default Input;
