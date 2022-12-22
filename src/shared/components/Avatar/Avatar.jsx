@@ -1,29 +1,38 @@
-import "./avatar.css";
+import styles from "./Avatar.module.css";
 
 import { usePlayer } from "shared/hooks";
+import { useState } from "react";
+
+const fallbackAvatarSrc =
+    "https://avatars.dicebear.com/api/croodles-neutral/your-custom-seed.svg";
+const fallbackAccentColor = "#f0f0f0";
 
 const Avatar = ({ playerId, size = 48, withUsername }) => {
+    const [imageSrc, setImageSrc] = useState();
     const player = usePlayer(playerId);
 
     return (
-        <div className="avatar">
+        <div className={styles.avatar}>
             <div
-                className="avatar-img-container"
+                className={styles.imageWrapper}
                 style={{
-                    backgroundColor: player.accent || "#f0f0f0",
+                    backgroundColor: player.accent ?? fallbackAccentColor,
                     width: `${size}px`,
                     height: `${size}px`,
                     borderRadius: `${size}px`,
                 }}
             >
                 <img
-                    className="avatar-img"
+                    className={styles.image}
                     draggable="false"
-                    src={player.avatar}
-                    alt={`${player.username}'s Avatar`}
+                    src={imageSrc || player.avatar || ""}
+                    alt={`${player.username || "Anon"}'s Avatar`}
+                    onError={() => setImageSrc(fallbackAvatarSrc)}
                 />
             </div>
-            {withUsername && <p className="avatar-label">{player.username}</p>}
+            {withUsername ? (
+                <p className={styles.username}>{player.username}</p>
+            ) : null}
         </div>
     );
 };

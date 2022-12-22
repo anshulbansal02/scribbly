@@ -5,18 +5,17 @@
     gap: 8px;
 }
 
-.avatar-img-container {
+.imageWrapper {
     display: grid;
     place-items: center;
     overflow: hidden;
 }
 
-.avatar-img {
+.image {
     width: 70%;
-    height: 70%;
 }
 
-.avatar-label {
+.username {
     font-size: 1.4rem;
     font-weight: 500;
 }
