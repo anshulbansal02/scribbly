@@ -46,7 +46,7 @@ const roomAtoms = {
 
         set(roomAtoms.players, {
             ...get(roomAtoms.players),
-            id: {
+            [id]: {
                 id,
                 username,
                 avatar: avatar.imageURL,

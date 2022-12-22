@@ -2,6 +2,7 @@ import "./home.css";
 
 import { useState } from "react";
 import { useSetAtom } from "jotai";
+import { useNavigate } from "react-router";
 
 import { useInput, useToggle, useSocket } from "shared/hooks";
 
@@ -28,6 +29,7 @@ export default function Home() {
 
     const api = useApi();
     const socket = useSocket();
+    const navigate = useNavigate();
 
     function validateUsernameInput() {
         if (usernameInput.value) return true;
@@ -50,6 +52,8 @@ export default function Home() {
 
             const room = await api.createRoom();
             setRoom(room);
+
+            navigate("game");
         }
     };
 

@@ -29,7 +29,7 @@ export default function GameSettings({ onChange }) {
                         name="difficulty"
                         labelKey="label"
                         options={gameSettingsOptions.difficulty.options}
-                        selected={gameSettings.difficulty}
+                        selected={0}
                         onChange={handleSettingsChange}
                         disabled={!isAdmin}
                     />
@@ -40,7 +40,7 @@ export default function GameSettings({ onChange }) {
                         name="rounds"
                         labelKey="label"
                         options={gameSettingsOptions.rounds.options}
-                        selected={gameSettings.rounds}
+                        selected={2}
                         onChange={handleSettingsChange}
                         disabled={!isAdmin}
                     />
@@ -53,11 +53,12 @@ export default function GameSettings({ onChange }) {
                         name="drawingTime"
                         labelKey="label"
                         options={gameSettingsOptions.drawingTime.options}
-                        selected={gameSettings.drawingTime}
+                        selected={60}
                         onChange={handleSettingsChange}
                         disabled={!isAdmin}
                     />
                 </div>
+                <div className="settings"></div>
             </div>
         </div>
     );

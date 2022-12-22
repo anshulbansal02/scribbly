@@ -11,7 +11,7 @@ import { Page, TextAction, Button, Modal } from "shared/components";
 import { GameSettings, RoomPlayers } from "routes/components";
 
 export default function Lobby() {
-    const roomJoinURL = useAtomValue(roomAtoms.roomJoinURL);
+    const roomJoinURL = useAtomValue(roomAtoms.joinURL);
     const [gs, setGameSettings] = useState(); // useAtom
     const resetRoom = useSetAtom(roomAtoms.reset);
 
