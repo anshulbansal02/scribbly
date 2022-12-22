@@ -1,9 +1,13 @@
-import "./button.css";
+import styles from "./Button.module.css";
 
-const Button = ({ children, className, disabled, ...props }) => {
+import classNames from "classnames";
+
+const Button = ({ children, theme, disabled, ...props }) => {
     return (
         <button
-            className={`btn-block ${className} ${disabled && "disabled"}`}
+            className={classNames(styles.base, styles[theme], {
+                [styles.disabled]: disabled,
+            })}
             {...props}
         >
             {children}

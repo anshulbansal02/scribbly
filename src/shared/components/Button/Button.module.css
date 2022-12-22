@@ -1,16 +1,16 @@
-.btn-block {
+.base {
     width: 100%;
     height: 48px;
-    box-sizing: border-box;
     padding: 0 24px;
 
     border-radius: 8px;
     border: 0;
 
-    font-size: 16px;
+    font-size: 1.6rem;
     white-space: nowrap;
     line-height: 1;
     color: #36395a;
+
     background-color: #fcfcfd;
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
@@ -21,50 +21,50 @@
     transition: box-shadow 0.15s, transform 0.15s;
 }
 
-.btn-block:focus {
+.base:focus {
     box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
 }
 
-.btn-block:hover {
+.base:hover {
     box-shadow: rgba(45, 35, 66, 0.4) 0 3px 6px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
     transform: translateY(-2px);
 }
 
-.btn-block:active {
+.base:active {
     box-shadow: #d6d6e7 0 3px 7px inset;
     transform: translateY(2px);
 }
 
-.btn-block.green {
+.base.green {
     background-color: #27ae60;
     color: rgb(240, 240, 240);
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, rgb(3, 107, 51) 0 -3px 0 inset;
 }
 
-.btn-block.blue {
+.base.blue {
     background-color: #175bda;
     color: rgb(240, 240, 240);
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #0039a3 0 -3px 0 inset;
 }
 
-.btn-block.red {
+.base.red {
     background-color: crimson;
     color: #fff;
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, rgb(117, 8, 30) 0 -3px 0 inset;
 }
 
-.btn-block.disabled {
+.base.disabled {
     background-color: #939393;
     color: rgb(240, 240, 240);
     box-shadow: #6d6d6d 0 -3px 0 inset;
 }
 
-.btn-block:hover.disabled {
+.base:hover.disabled {
     transform: translateY(0);
     cursor: not-allowed;
 }
