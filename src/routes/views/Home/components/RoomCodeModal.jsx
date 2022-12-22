@@ -1,10 +1,9 @@
-import "./home.css";
+import styles from "./RoomCodeModal.module.scss";
 
 import { useState } from "react";
-
 import { useInput } from "shared/hooks";
 
-import { Modal, Button, Input } from "shared/components";
+import { Modal, Button, Field } from "shared/components";
 import useApi from "api";
 
 export default function RoomCodeModal({ isOpen, onClose, username }) {
@@ -22,20 +21,25 @@ export default function RoomCodeModal({ isOpen, onClose, username }) {
     }
 
     const handleRoomJoin = async () => {
-        validateRoomCodeInput() && (await api.joinRoom());
+        if (validateRoomCodeInput()) {
+            await api.createPlayer(username);
+            await api.requestRoomJoin(roomCodeInput.value);
+        }
     };
 
     return (
         <Modal
             isOpen={isOpen}
             onOutsideClick={onClose}
-            className="room-code-modal"
+            className={styles.container}
         >
-            <div className="modal-text">
+            <div className={styles.header}>
                 <h3>Hey {username},</h3>
                 <p>What's your room code?</p>
             </div>
-            <Input
+            <Field
+                className={styles.roomCodeField}
+                style={{ textAlign: "center" }}
                 type="text"
                 placeholder="Room Code"
                 spellCheck="false"
@@ -44,7 +48,7 @@ export default function RoomCodeModal({ isOpen, onClose, username }) {
                 {...roomCodeInput}
                 autoFocus
             />
-            <Button onClick={handleRoomJoin} className="green">
+            <Button onClick={handleRoomJoin} theme="green">
                 Lessgo
             </Button>
             <Button onClick={onClose}>Cancel</Button>

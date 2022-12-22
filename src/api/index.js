@@ -4,7 +4,11 @@ import { useCallback } from "react";
 
 import { useToaster } from "shared/hooks";
 
+import { useSetAtom } from "jotai";
+
 import authAtoms from "store/atoms/authAtoms";
+import playerAtoms from "store/atoms/playerAtoms";
+import roomAtoms from "store/atoms/roomAtoms";
 
 const server = axios.create({
     baseURL: `${process.env.REACT_APP_API_SERVER_URL}/api`,
@@ -38,13 +42,20 @@ function useApi() {
         [toaster]
     );
 
+    const setPlayer = useSetAtom(playerAtoms.player);
+    const setAssociationToken = useSetAtom(authAtoms.associationToken);
+    const setRoom = useSetAtom(roomAtoms.room);
+
     return {
         async createPlayer(username) {
-            return (
-                (await request("post", "/player/create", {
-                    data: { username },
-                })) ?? {}
-            );
+            const { player, token } = await request("post", "/player/create", {
+                data: { username },
+            });
+
+            setPlayer(player);
+            setAssociationToken(token);
+
+            return player;
         },
 
         async getPlayer(playerId) {
@@ -52,19 +63,14 @@ function useApi() {
         },
 
         async createRoom() {
-            return await request("post", "/room/create");
+            const room = await request("post", "/room/create");
+            setRoom(room);
+
+            return room;
         },
 
         async requestRoomJoin(roomId) {
-            const resp = await server.post("/room/join", { roomId });
-        },
-
-        async roomExists(roomId) {
-            const resp = await server.get(`/room-exists/${roomId}`);
-        },
-
-        async getRoom(roomId) {
-            const resp = await server.get(`room/${roomId}`);
+            await request("post", `/room/join/${roomId}`);
         },
     };
 }

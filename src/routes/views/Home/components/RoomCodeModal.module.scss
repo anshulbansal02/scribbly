@@ -1,0 +1,27 @@
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 420px;
+    padding: 24px;
+
+    .header {
+        grid-column: span 2;
+        margin-bottom: 16px;
+        text-align: center;
+
+        h3 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 2rem;
+            font-weight: 500;
+        }
+    }
+
+    .roomCodeField {
+        grid-column: span 2;
+    }
+}

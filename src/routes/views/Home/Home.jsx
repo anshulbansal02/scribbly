@@ -1,31 +1,23 @@
-import "./home.css";
+import "./Home.scss";
 
 import { useState } from "react";
-import { useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useNavigate } from "react-router";
-
-import { useInput, useToggle, useSocket } from "shared/hooks";
+import { useInput, useSocket, useToggle } from "shared/hooks";
+import useApi from "api";
 
 import playerAtoms from "store/atoms/playerAtoms";
-import authAtoms from "store/atoms/authAtoms";
-import roomAtoms from "store/atoms/roomAtoms";
 
-import { Page, Button, Input } from "shared/components";
-import useApi from "api";
-import RoomCodeModal from "./RoomCodeModal";
+import { Button, Field } from "shared/components";
+import RoomCodeModal from "./components/RoomCodeModal";
 
 export default function Home() {
-    // UI State
     const usernameInput = useInput({
+        initialValue: useAtomValue(playerAtoms.username),
         changeHook: () => setUsernameInputError(""),
     });
     const [usernameInputError, setUsernameInputError] = useState("");
     const [roomCodeModalOpen, toggleRoomCodeModal] = useToggle();
-
-    // Atoms
-    const setRoom = useSetAtom(roomAtoms.room);
-    const setPlayer = useSetAtom(playerAtoms.player);
-    const setAssociationToken = useSetAtom(authAtoms.associationToken);
 
     const api = useApi();
     const socket = useSocket();
@@ -44,45 +36,41 @@ export default function Home() {
 
     const handleNewRoom = async () => {
         if (validateUsernameInput()) {
-            const { player, token } = await api.createPlayer(
-                usernameInput.value
-            );
-            setPlayer(player);
-            setAssociationToken(token);
-
-            const room = await api.createRoom();
-            setRoom(room);
-
+            await api.createPlayer(usernameInput.value);
+            await api.createRoom();
             navigate("game");
         }
     };
 
-    const handleJoinRoom = () => {
-        validateUsernameInput() && toggleRoomCodeModal();
-    };
-
     return (
-        <Page className="home-page">
+        <div className="page home">
             <div className="header">
-                <h3 className="title">Scribbly</h3>
-                <h5 className="sub-title">
+                <h3 className="logo">Scribbly</h3>
+                <h5 className="subtitle">
                     Realtime multiplayer online pictionary
                 </h5>
             </div>
 
-            <div className="home-ctas">
-                <Input
+            <div className="ctas">
+                <Field
+                    style={{ textAlign: "center" }}
                     type="text"
                     placeholder="What would you like to call yourself?"
                     spellCheck="false"
                     error={usernameInputError}
                     {...usernameInput}
                 />
-                <Button onClick={handlePlayNow} className="green">
+                <Button onClick={handlePlayNow} theme="green">
                     Play Now
                 </Button>
                 <Button onClick={handleNewRoom}>New Room</Button>
-                <Button onClick={handleJoinRoom}>Join Room</Button>
+                <Button
+                    onClick={() => {
+                        validateUsernameInput() && toggleRoomCodeModal();
+                    }}
+                >
+                    Join Room
+                </Button>
             </div>
 
             <RoomCodeModal
@@ -90,6 +78,6 @@ export default function Home() {
                 onClose={toggleRoomCodeModal}
                 username={usernameInput.value}
             />
-        </Page>
+        </div>
     );
 }

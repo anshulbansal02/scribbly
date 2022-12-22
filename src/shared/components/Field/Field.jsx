@@ -6,9 +6,9 @@ import { ReactComponent as ErrorIcon } from "./static/error.svg";
 
 const Field = ({ className, error, ...props }) => {
     return (
-        <div className={styles.field}>
+        <div className={classNames(styles.field, className)}>
             <input
-                className={classNames(styles.input, className, {
+                className={classNames(styles.input, {
                     [styles.errorInput]: error,
                 })}
                 {...props}
