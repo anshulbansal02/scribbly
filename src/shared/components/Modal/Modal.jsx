@@ -1,19 +1,26 @@
-import "./modal.css";
+import styles from "./Modal.module.css";
 
 import { createPortal } from "react-dom";
+import classNames from "classnames";
 
-const Modal = ({ isOpen, children, onOutsideClick, className }) => {
-    const handleOutsideClick = (e) => {
-        if (e.target === e.currentTarget && onOutsideClick) onOutsideClick();
-    };
+const portal = document.getElementById("portal");
 
+const Modal = ({ isOpen, onOutsideClick, className, children }) => {
     return createPortal(
-        isOpen ? (
-            <div className="modal-overlay" onClick={handleOutsideClick}>
-                <div className={`modal ${className ?? ""}`}>{children}</div>
+        isOpen && (
+            <div
+                className={styles.overlay}
+                onClick={(e) => {
+                    if (onOutsideClick && e.target === e.currentTarget)
+                        onOutsideClick();
+                }}
+            >
+                <div className={classNames(styles.modal, className)}>
+                    {children}
+                </div>
             </div>
-        ) : null,
-        document.getElementById("portal")
+        ),
+        portal
     );
 };
 

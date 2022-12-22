@@ -1,7 +1,8 @@
-.modal-overlay {
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
+
     display: grid;
     place-items: center;
     width: 100%;
@@ -12,7 +13,7 @@
 
 .modal {
     max-width: 90%;
-    padding: 16px 20px;
+    padding: 16px;
 
     border-radius: 12px;
 
