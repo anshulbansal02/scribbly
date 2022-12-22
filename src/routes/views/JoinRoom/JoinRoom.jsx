@@ -10,7 +10,7 @@ import roomAtoms from "store/atoms/roomAtoms";
 import playerAtoms from "store/atoms/playerAtoms";
 import IOEvents from "store/constants/IOEvents";
 
-import { Button, Input, Page } from "shared/components";
+import { Button, Field, Page } from "shared/components";
 
 const API = process.env.REACT_APP_API_SERVER_URL;
 
@@ -62,7 +62,7 @@ export default function Join() {
                 <div className="room-username">
                     <h4>What username would you give yourself?</h4>
                     <div className="username-input-field">
-                        <Input
+                        <Field
                             autoFocus
                             placeholder="Username"
                             {...usernameInput}
