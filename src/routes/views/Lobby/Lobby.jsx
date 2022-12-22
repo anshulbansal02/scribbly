@@ -47,7 +47,7 @@ export default function Lobby() {
     };
 
     return (
-        <Page className="lobby-page">
+        <div className="page lobby-page">
             <div className="header">
                 <h4 className="logo">Scribbly</h4>
             </div>
@@ -84,6 +84,6 @@ export default function Lobby() {
                     <Button onClick={toggleExitRoomModal}>Noooo</Button>
                 </div>
             </Modal>
-        </Page>
+        </div>
     );
 }

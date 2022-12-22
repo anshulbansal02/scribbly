@@ -1,4 +1,3 @@
-export { default as Page } from "./Page/Page";
 export { default as Button } from "./Button/Button";
 export { default as Field } from "./Field/Field";
 export { default as Modal } from "./Modal/Modal";

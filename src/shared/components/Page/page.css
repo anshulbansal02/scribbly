@@ -1,5 +1,0 @@
-.page {
-    width: 100%;
-    min-height: 100vh;
-    padding: 0 clamp(16px, 5%, 120px);
-}

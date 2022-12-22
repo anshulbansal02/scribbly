@@ -57,7 +57,7 @@ export default function Join() {
     }, [socket]);
 
     return (
-        <Page className="join-view">
+        <div className="page join-view">
             {roomExists ? (
                 <div className="room-username">
                     <h4>What username would you give yourself?</h4>
@@ -85,6 +85,6 @@ export default function Join() {
                     <Button onClick={() => navigate("/")}>Back To Home</Button>
                 </div>
             )}
-        </Page>
+        </div>
     );
 }

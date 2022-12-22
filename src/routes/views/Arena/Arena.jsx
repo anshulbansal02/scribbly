@@ -5,9 +5,9 @@ import { Chatbox, Board } from "routes/components";
 
 export default function Arena() {
     return (
-        <Page className="arena-page">
+        <div className="page">
             <Chatbox />
             <Board />
-        </Page>
+        </div>
     );
 }
