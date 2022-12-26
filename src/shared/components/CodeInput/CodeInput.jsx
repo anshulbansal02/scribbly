@@ -7,7 +7,14 @@ const KEY = {
     ARROW_RIGHT: 39,
 };
 
-const CodeInput = ({ length, type, onChange, value, ...props }) => {
+const CodeInput = ({
+    length,
+    type,
+    onChange,
+    value,
+    pasteParser,
+    ...props
+}) => {
     const [chars, setChars] = useState(value?.split("") || []);
     const inputsRef = useRef([]);
 
@@ -20,7 +27,12 @@ const CodeInput = ({ length, type, onChange, value, ...props }) => {
         const pastedText = (e.clipboardData ?? window.clipboardData).getData(
             "text"
         );
-        setChars(pastedText.slice(0, length).split(""));
+
+        const parsed = ((pasteParser && pasteParser(pastedText)) || pastedText)
+            .slice(0, length)
+            .split("");
+
+        setChars(parsed);
     };
 
     const handleKeyDown = (e) => {
