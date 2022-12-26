@@ -1,5 +1,6 @@
 export { default as Button } from "./Button/Button";
 export { default as Field } from "./Field/Field";
+export { default as CodeInput } from "./CodeInput/CodeInput";
 export { default as Modal } from "./Modal/Modal";
 export { default as Avatar } from "./Avatar/Avatar";
 export { default as Selector } from "./Selector/Selector";

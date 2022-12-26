@@ -9,7 +9,7 @@ const useInput = (initialValue) => {
 
     const onChange = useCallback(
         function ({ target: { value } }) {
-            const hookReturnValue = initialValue?.changeHook(value);
+            const hookReturnValue = initialValue?.changeHook?.call(null, value);
             setValue(hookReturnValue ?? value);
         },
         [initialValue]
