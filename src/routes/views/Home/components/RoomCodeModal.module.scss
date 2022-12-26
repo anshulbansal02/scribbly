@@ -1,27 +1,35 @@
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    width: 420px;
     padding: 24px;
+    transition: all 0.5s;
 
-    .header {
-        grid-column: span 2;
-        margin-bottom: 16px;
-        text-align: center;
+    .codeInputContainer {
+        .text {
+            grid-column: span 2;
+            margin-bottom: 24px;
+            text-align: center;
 
-        h3 {
-            font-size: 2rem;
-            font-weight: 700;
+            h3 {
+                font-size: 2rem;
+                font-weight: 700;
+            }
+
+            p {
+                font-size: 2rem;
+                font-weight: 500;
+            }
         }
 
-        p {
-            font-size: 2rem;
-            font-weight: 500;
+        .helpText {
+            text-align: center;
+            margin: 8px 0 24px 0;
+            font-size: 1.4rem;
+            color: rgba(0, 0, 0, 0.67);
         }
-    }
 
-    .roomCodeField {
-        grid-column: span 2;
+        .btnGroup {
+            display: flex;
+            flex-flow: row nowrap;
+            gap: 16px;
+        }
     }
 }

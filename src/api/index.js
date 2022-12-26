@@ -20,27 +20,24 @@ function useApi() {
     const clientId = useAtomValue(authAtoms.clientId);
     server.defaults.headers.common["Client-Id"] = clientId;
 
-    const request = useCallback(
-        async (method, endpoint, config) => {
-            const { params, data } = config || {};
-            try {
-                const response = await server({
-                    method,
-                    url: endpoint,
-                    data,
-                    params,
-                });
+    const request = async (method, endpoint, config) => {
+        const { params, data } = config || {};
+        try {
+            const response = await server({
+                method,
+                url: endpoint,
+                data,
+                params,
+            });
 
-                return response.data.message;
-            } catch (err) {
-                toaster.error({
-                    title: "Server Error! Please try again.",
-                    dismissable: false,
-                });
-            }
-        },
-        [toaster]
-    );
+            return response.data.message;
+        } catch (err) {
+            toaster.error({
+                title: "Server Error! Please try again.",
+                dismissable: false,
+            });
+        }
+    };
 
     const setPlayer = useSetAtom(playerAtoms.player);
     const setAssociationToken = useSetAtom(authAtoms.associationToken);
@@ -71,6 +68,10 @@ function useApi() {
 
         async requestRoomJoin(roomId) {
             await request("post", `/room/join/${roomId}`);
+        },
+
+        async cancelRoomJoinRequest() {
+            await request("post", "/room/cancel-join/");
         },
     };
 }

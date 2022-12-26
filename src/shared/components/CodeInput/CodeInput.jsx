@@ -1,5 +1,6 @@
 import styles from "./CodeInput.module.css";
 import { useEffect, useRef, useState } from "react";
+import classNames from "classnames";
 
 const KEY = {
     BACKSPACE: 8,
@@ -8,20 +9,25 @@ const KEY = {
 };
 
 const CodeInput = ({
+    id,
     length,
     type,
     onChange,
     value,
     pasteParser,
+    className,
+    disabled,
     ...props
 }) => {
+    if (!id) throw new Error("CodeInput 'id' prop is required.");
+
     const [chars, setChars] = useState(value?.split("") || []);
     const inputsRef = useRef([]);
 
     useEffect(() => {
         const code = chars.join("");
         onChange?.call(null, { target: { value: code } });
-    }, [chars, onChange]);
+    }, [chars]);
 
     const handlePaste = (e) => {
         const pastedText = (e.clipboardData ?? window.clipboardData).getData(
@@ -33,13 +39,15 @@ const CodeInput = ({
             .split("");
 
         setChars(parsed);
+
+        inputsRef.current[length - 1]?.focus();
     };
 
     const handleKeyDown = (e) => {
         if (e.metaKey) return;
         e.preventDefault();
 
-        const inputId = +e.target.id;
+        const inputId = +e.target.id.split("_").at(-1);
         const char = String.fromCharCode(e.keyCode);
 
         if (e.which === KEY.ARROW_LEFT) {
@@ -64,11 +72,11 @@ const CodeInput = ({
     };
 
     return (
-        <div className={styles.codeInput}>
+        <div className={classNames(styles.codeInput, className)}>
             {[...Array(length)].map((_, i) => (
                 <input
-                    key={i}
-                    id={i}
+                    key={`${id}_${i}`}
+                    id={`${id}_${i}`}
                     maxLength={1}
                     value={chars[i] ?? ""}
                     className={styles.charInput}
@@ -76,6 +84,7 @@ const CodeInput = ({
                     onKeyDown={handleKeyDown}
                     ref={(el) => (inputsRef.current[i] = el)}
                     onChange={() => {}}
+                    disabled={disabled}
                 />
             ))}
         </div>

@@ -1,4 +1,4 @@
-import "./Home.scss";
+import styles from "./Home.module.scss";
 
 import { useState } from "react";
 import { useAtomValue } from "jotai";
@@ -43,15 +43,15 @@ export default function Home() {
     };
 
     return (
-        <div className="page home">
-            <div className="header">
-                <h3 className="logo">Scribbly</h3>
-                <h5 className="subtitle">
+        <div className={styles.home}>
+            <div className={styles.header}>
+                <h3 className={styles.logo}>Scribbly</h3>
+                <h5 className={styles.subtitle}>
                     Realtime multiplayer online pictionary
                 </h5>
             </div>
 
-            <div className="ctas">
+            <div className={styles.ctas}>
                 <Field
                     style={{ textAlign: "center" }}
                     type="text"

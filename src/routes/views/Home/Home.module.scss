@@ -3,11 +3,13 @@
 }
 
 .home {
-    overflow-y: hidden;
+    width: 100%;
+    height: 100vh;
+    padding-top: 60px;
 
     .header {
         text-align: center;
-        margin: 24px 0 120px 0;
+        margin-bottom: 150px;
 
         .logo {
             font-size: 3.2rem;
