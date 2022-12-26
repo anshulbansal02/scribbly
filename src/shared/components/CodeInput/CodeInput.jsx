@@ -3,41 +3,45 @@ import { useEffect, useRef, useState } from "react";
 
 const KEY = {
     BACKSPACE: 8,
+    ARROW_LEFT: 37,
+    ARROW_RIGHT: 39,
 };
 
 const CodeInput = ({ length, type, onChange, value, ...props }) => {
     const [chars, setChars] = useState(value?.split("") || []);
     const inputsRef = useRef([]);
 
+    useEffect(() => {
+        const code = chars.join("");
+        onChange?.call(null, { target: { value: code } });
+    }, [chars, onChange]);
+
     const handlePaste = (e) => {
         const pastedText = (e.clipboardData ?? window.clipboardData).getData(
             "text"
         );
+        setChars(pastedText.slice(0, length).split(""));
     };
-
-    useEffect(() => {
-        const code = chars.join("");
-        onChange?.call(null, { target: { value: code } });
-    }, [chars]);
 
     const handleKeyDown = (e) => {
         if (e.metaKey) return;
         e.preventDefault();
 
         const inputId = +e.target.id;
+        const char = String.fromCharCode(e.keyCode);
 
-        if (e.which === KEY.BACKSPACE) {
+        if (e.which === KEY.ARROW_LEFT) {
+            inputsRef.current[inputId - 1]?.focus();
+        } else if (e.which === KEY.ARROW_RIGHT) {
+            inputsRef.current[inputId + 1]?.focus();
+        } else if (e.which === KEY.BACKSPACE) {
             setChars((oldChars) => {
                 const chars = [...oldChars];
                 chars[inputId] = null;
                 return chars;
             });
             inputsRef.current[inputId - 1]?.focus();
-            return;
-        }
-
-        const char = String.fromCharCode(e.keyCode);
-        if (char.match(/[a-zA-Z0-9]/g)) {
+        } else if (char.match(/[a-zA-Z0-9]/g)) {
             setChars((oldChars) => {
                 const chars = [...oldChars];
                 chars[inputId] = char;
