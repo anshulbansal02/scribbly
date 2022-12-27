@@ -1,15 +1,23 @@
-.selector {
+.container {
     display: flex;
     flex-flow: row nowrap;
-    background-color: #f5f5fa;
     border-radius: 8px;
     align-items: center;
-    justify-content: space-between;
     height: 48px;
-    width: 100%;
+
+    border: 1px solid rgb(209 213 219);
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 2.25px 2.25px -1.5px rgba(0, 0, 0, 0.15);
 }
 
-.selector-btn {
+.optionLabel {
+    font-size: 1.6rem;
+    width: 100%;
+    text-align: center;
+}
+
+.btn {
     cursor: pointer;
     height: 48px;
     min-width: 48px;
@@ -19,18 +27,18 @@
     place-items: center;
 }
 
-.selector-btn svg {
+.btn svg {
     width: 18px;
     color: rgb(120, 120, 120);
     transition: color 0.2s;
 }
 
-.selector-btn:hover svg {
+.btn:hover svg {
     color: rgb(20, 20, 20);
 }
 
-.selected-option {
-    font-size: 1.5rem;
-    width: 100%;
-    text-align: center;
+.btn:focus {
+    outline: none;
+    border: 1px dashed rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
 }

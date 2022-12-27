@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { gameSettingsOptions } from "store/config";
 import { useIsAdmin } from "shared/hooks";
 
-import { Selector } from "shared/components";
+import { OptionStepper } from "shared/components";
 import { useState } from "react";
 
 export default function GameSettings({ onChange }) {
@@ -25,7 +25,7 @@ export default function GameSettings({ onChange }) {
             <div className="settings-list">
                 <div className="setting">
                     <label className="setting-label">Difficulty Level</label>
-                    <Selector
+                    <OptionStepper
                         name="difficulty"
                         labelKey="label"
                         options={gameSettingsOptions.difficulty.options}
@@ -36,7 +36,7 @@ export default function GameSettings({ onChange }) {
                 </div>
                 <div className="setting">
                     <label className="setting-label">Number Of Rounds</label>
-                    <Selector
+                    <OptionStepper
                         name="rounds"
                         labelKey="label"
                         options={gameSettingsOptions.rounds.options}
@@ -49,7 +49,7 @@ export default function GameSettings({ onChange }) {
                     <label className="setting-label">
                         Drawing Time (in seconds)
                     </label>
-                    <Selector
+                    <OptionStepper
                         name="drawingTime"
                         labelKey="label"
                         options={gameSettingsOptions.drawingTime.options}

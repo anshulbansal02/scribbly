@@ -3,7 +3,7 @@ export { default as Field } from "./Field/Field";
 export { default as CodeInput } from "./CodeInput/CodeInput";
 export { default as Modal } from "./Modal/Modal";
 export { default as Avatar } from "./Avatar/Avatar";
-export { default as Selector } from "./Selector/Selector";
+export { default as OptionStepper } from "./OptionStepper/OptionStepper";
 export { default as TextAction } from "./TextAction/TextAction";
 export { default as Toast } from "./Toast/Toast";
 export { default as ToastContainer } from "./ToastContainer/ToastContainer";

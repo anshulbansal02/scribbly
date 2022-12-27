@@ -81,10 +81,9 @@ export default function RoomCodeModal({ isOpen, onClose, username }) {
 
                 <div className={styles.btnGroup}>
                     {isRequested ? (
-                        <Button
-                            theme="red"
-                            onClick={handleCancelRequest}
-                        ></Button>
+                        <Button theme="red" onClick={handleCancelRequest}>
+                            Cancel
+                        </Button>
                     ) : (
                         <>
                             <Button onClick={onClose}>Cancel</Button>
