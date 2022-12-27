@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    height: 48px;
+    padding-left: 16px;
+    padding-right: 8px;
+
+    border-radius: 8px;
+    background-color: #f5f5fa;
+}
+
+.text {
+    font-size: 1.6rem;
+}
+
+.actions {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 8px;
+}
+
+.btn {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid rgb(209 213 219);
+    border-radius: 8px;
+    background-color: transparent;
+    box-shadow: 0px 2.25px 2.25px -1.5px rgba(0, 0, 0, 0.15);
+
+    cursor: pointer;
+}
+
+.btn svg {
+    width: 16px;
+}

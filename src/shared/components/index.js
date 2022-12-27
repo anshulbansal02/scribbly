@@ -4,7 +4,7 @@ export { default as CodeInput } from "./CodeInput/CodeInput";
 export { default as Modal } from "./Modal/Modal";
 export { default as Avatar } from "./Avatar/Avatar";
 export { default as OptionStepper } from "./OptionStepper/OptionStepper";
-export { default as TextAction } from "./TextAction/TextAction";
+export { default as Clipboard } from "./Clipboard/Clipboard";
 export { default as Toast } from "./Toast/Toast";
 export { default as ToastContainer } from "./ToastContainer/ToastContainer";
 export { default as Timer } from "./Timer/Timer";
