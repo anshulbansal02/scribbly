@@ -1,0 +1,9 @@
+.logo {
+    display: inline-block;
+}
+
+.logo h1 {
+    font-size: 1.6rem;
+    font-family: "Krona One";
+    user-select: none;
+}

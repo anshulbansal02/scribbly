@@ -8,7 +8,7 @@ import useApi from "api";
 
 import playerAtoms from "store/atoms/playerAtoms";
 
-import { Button, Field } from "shared/components";
+import { Button, Field, Logo } from "shared/components";
 import RoomCodeModal from "./components/RoomCodeModal";
 
 export default function Home() {
@@ -45,7 +45,7 @@ export default function Home() {
     return (
         <div className={styles.home}>
             <div className={styles.header}>
-                <h3 className={styles.logo}>Scribbly</h3>
+                <Logo size={32} />
                 <h5 className={styles.subtitle}>
                     Realtime multiplayer online pictionary
                 </h5>

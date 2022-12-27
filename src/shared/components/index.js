@@ -9,3 +9,4 @@ export { default as Toast } from "./Toast/Toast";
 export { default as ToastContainer } from "./ToastContainer/ToastContainer";
 export { default as Timer } from "./Timer/Timer";
 export { default as WordBoard } from "./WordBoard/WordBoard";
+export { default as Logo } from "./Logo/Logo";

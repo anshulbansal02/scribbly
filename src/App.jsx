@@ -62,9 +62,9 @@ export default function App() {
     }, [socket]);
 
     return (
-        <div className="App">
+        <>
             <RouterProvider router={router} />
             <ToastContainer />
-        </div>
+        </>
     );
 }
