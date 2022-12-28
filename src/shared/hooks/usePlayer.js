@@ -9,6 +9,7 @@ import roomAtoms from "store/atoms/roomAtoms";
 export default function usePlayer(playerId) {
     const [player, setPlayer] = useState({
         id: playerId,
+        username: "Unnamed",
     });
 
     const cachedPlayerData = useAtomValue(

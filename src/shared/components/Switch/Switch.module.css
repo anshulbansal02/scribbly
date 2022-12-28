@@ -1,0 +1,45 @@
+.checkbox {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.track {
+    display: flex;
+    align-items: center;
+    width: 44px;
+    height: 28px;
+
+    border-radius: 24px;
+    background-color: #cccfd5;
+
+    cursor: pointer;
+
+    transition: all 0.24s ease-out;
+}
+
+.knob {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    left: 4px;
+
+    border-radius: 24px;
+    background-color: #fff;
+    box-shadow: 0px 2.25px 2.25px -1.5px rgba(0, 0, 0, 0.3);
+
+    transition: left 0.2s ease-out, transform 0.2s ease-out, width 0.3s ease-out;
+}
+
+.checkbox:checked + .track .knob {
+    left: calc(100% - 4px);
+    transform: translateX(-100%);
+}
+
+.checkbox:checked + .track {
+    background-color: #0da056;
+}
+
+.track:active .knob {
+    width: 24px;
+}
