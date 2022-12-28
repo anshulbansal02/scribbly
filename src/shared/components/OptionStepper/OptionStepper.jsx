@@ -29,6 +29,8 @@ const OptionStepper = ({
         if (JSON.stringify(options[selectedI]) === JSON.stringify(value)) break;
     }
 
+    const optionMaxWidth = Math.max(...options.map((el) => el.length)) || 0;
+
     return (
         <div className={classNames(styles.container, className)}>
             {disabled || (
@@ -36,7 +38,13 @@ const OptionStepper = ({
                     <ArrowLeft />
                 </button>
             )}
-            <p className={styles.optionLabel}>
+            <p
+                className={styles.optionLabel}
+                style={{
+                    width: `${optionMaxWidth}ch`,
+                    margin: `0 ${disabled ? 24 : 12}px`,
+                }}
+            >
                 {labelKey ? options[selectedI][labelKey] : options[selectedI]}
             </p>
             {disabled || (

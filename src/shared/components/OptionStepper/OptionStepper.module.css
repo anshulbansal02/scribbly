@@ -13,7 +13,6 @@
 
 .optionLabel {
     font-size: 1.6rem;
-    width: 100%;
     text-align: center;
 }
 
@@ -39,6 +38,4 @@
 
 .btn:focus {
     outline: none;
-    border: 1px dashed rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
 }
