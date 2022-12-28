@@ -39,19 +39,3 @@ const Clipboard = ({ text }) => {
 };
 
 export default Clipboard;
-
-{
-    /* <div className={styles.container}>
-    <p className="text">{text}</p>
-    <div className="actions">
-        {navigator.share ? (
-            <button className="btn-icon" onClick={handleShare}>
-                <ShareIcon />
-            </button>
-        ) : null}
-        <button className="btn-icon" onClick={handleCopy}>
-            {isCopied ? <TickIcon /> : <CopyIcon />}
-        </button>
-    </div>
-</div> */
-}

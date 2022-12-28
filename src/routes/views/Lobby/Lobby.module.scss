@@ -1,0 +1,47 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    height: 60px;
+    border-bottom: 1px solid rgb(217, 217, 217);
+
+    .actions {
+        display: flex;
+        flex-flow: row nowrap;
+
+        .iconBtn {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border: 0;
+            cursor: pointer;
+            background-color: rgb(253, 228, 227);
+
+            border-radius: 8px;
+
+            svg {
+                width: 50%;
+                height: 50%;
+                color: rgb(240, 26, 18);
+                transform: scale(-1, 1);
+            }
+        }
+    }
+}
+
+.main {
+    display: flex;
+    flex-flow: row nowrap;
+
+    .panel {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        margin: 24px;
+    }
+
+    .chat {
+        width: 100%;
+    }
+}
