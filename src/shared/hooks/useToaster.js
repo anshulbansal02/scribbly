@@ -3,7 +3,7 @@ import { useSetAtom } from "jotai";
 import { nanoid } from "nanoid";
 
 import { pushToastAtom, popToastAtom } from "store/atoms/toastAtoms";
-import stylesConfig from "shared/components/Toast/config/toastDefaultStyles";
+import stylesConfig from "shared/components/Toast/config/defaults.js";
 
 function toastId() {
     return nanoid(6);

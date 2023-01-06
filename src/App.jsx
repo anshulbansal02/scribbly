@@ -8,7 +8,7 @@ import { router } from "routes";
 import { useSocket, useToaster } from "shared/hooks";
 import authAtoms from "store/atoms/authAtoms";
 
-import { ToastContainer } from "shared/components";
+import { Toaster } from "shared/components";
 
 export default function App() {
     const errorToast = useRef(null);
@@ -36,8 +36,7 @@ export default function App() {
             if (!errorToast.current) {
                 const toastId = toaster.error({
                     title: "Connection Error!",
-                    subtitle:
-                        "Cannot connect to the server. Trying to reconnect",
+                    text: "Cannot connect to the server. Trying to reconnect",
                     persistant: true,
                     dismissable: false,
                 });
@@ -64,7 +63,7 @@ export default function App() {
     return (
         <>
             <RouterProvider router={router} />
-            <ToastContainer />
+            <Toaster />
         </>
     );
 }
