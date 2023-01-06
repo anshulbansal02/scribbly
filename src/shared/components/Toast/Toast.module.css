@@ -1,0 +1,65 @@
+.container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0.5px 0.8px -2px rgba(0, 0, 0, 0.035),
+        0px 1.3px 2.3px -2px rgba(0, 0, 0, 0.05),
+        0px 3px 5.4px -2px rgba(0, 0, 0, 0.065),
+        0px 10px 18px -2px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+
+    pointer-events: auto;
+}
+
+.content {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 8px;
+    padding: 12px;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    align-self: flex-start;
+}
+
+.content p + p {
+    margin-top: 4px;
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 1px 0;
+    line-height: 1;
+}
+
+.text {
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+.dismissBtn {
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-content: center;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.dismissBtn svg {
+    width: 20px;
+    color: rgba(0, 0, 0, 0.4);
+    transition: color 0.15s ease-in-out;
+}
+
+.dismissBtn:hover svg {
+    color: rgba(0, 0, 0, 0.8);
+}
